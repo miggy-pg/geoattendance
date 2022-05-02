@@ -1,0 +1,22 @@
+{% load static %}
+
+<div class="form_add" id="sampleDiv" hx-target="this" hx-swap="outerHTML">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row_form">
+            {{ form }}
+            </div>
+            {% if timetable %}
+                <button class="timetable_submitbtn" type="submit" hx-post="{% url 'update_timetable' timetable.id %}">
+                    Change
+                </button>
+                <button class="timetable_deletebtn" type="submit" hx-get="{% url 'detail_timetable' timetable.id %}">
+                    Cancel
+                </button>
+            {% else %}
+                <button class="timetable_submitbtn" hx-post=".">Submit</button>
+            {% endif %}
+        </form>
+</div>
+
+<script src="{% static 'js/scripts.js' %}"></script>

@@ -1,0 +1,49 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Add Activity
+{% endblock %}
+
+{% block name %}
+  / Add Activity
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+      <main>
+        <div class="event__container">
+        {% if event_day %}
+          <div class="event__header">
+            <h1 style="text-transform:uppercase">{{ event_day.event_name}}&nbsp;&nbsp;<span style="color: #fff;">[{{event_day.event_day|date:"l - M d,Y" }}]</h1> </span>
+          </div>
+        {% endif %}
+        </div>
+        <div class="row-item">
+          <button type="button" class="add_activity" hx-get="{% url 'create_timetable_form' %}" hx-swap="beforeend" hx-target="#activity__time">
+            Add Activity
+          </button>
+          <div class="delete-activity">
+            <button hx-get="{% url 'remove_timetable_form' %}" hx-swap="outerHTML" hx-target="#sampleDiv">Delete</button>
+          </div>
+        </div>
+        
+        
+        <div class="addactivity__container">
+          <div class="activity__background">
+            <div id="activity__time">
+              {% for timetable in event_name %}
+                {% include 'dashboard/event/partials/timetable_details.html' %}
+              {% endfor %}
+            </div>  
+          </div>
+        </div>
+
+
+      </main>
+{% endblock %}

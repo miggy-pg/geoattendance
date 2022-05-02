@@ -1,0 +1,118 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Student Record
+{% endblock %}
+
+{% block name %}
+  / Student Record
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        <div class="studentrecord__container">
+          <div class="studentrecord__header">
+            <div class="search_wrap search_wrap_4">
+              <div class="search_box">
+                <h1>Student Record</h1>
+                <input type="text" id="searchField" class="input-record" placeholder="Search">
+              </div>
+            </div>
+          </div>
+          {% if users %}
+            <div class="studentrecord__table">
+
+                
+                <!-- <form method="get">
+                  {{studentFilter.form}}
+
+                </form> -->
+
+                <div class="table-users">
+                  <!-- <button id="print_student_record" style="cursor:pointer">print</button>     -->
+                  <table id="student_record_table" class="display">
+                      <thead>
+                        <tr>
+                          <th>ID Number</th>
+                          <th>Last Name</th>
+                          <th>First Name</th>
+                          <th>Email</th>
+                          <th>College</th>
+                          <th>Course</th>
+                          <th>Year Level</th>
+                          <th>Gender</th>
+                          <th>Signed In</th>
+                          <th>Signed Out</th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                        <tbody>
+                        <!-- {% for i in users %}
+                        <tr>
+                          <td>{{i.user_idnumber}}</td>
+                          <td>{{i.user_lname}}</td>
+                          <td>{{i.user_fname}}</td>
+                          <td>{{i.user_email}}</td>
+                          <td>{{i.college}}</td>
+                          <td>{{i.course}}</td>
+                          <td>{{i.yearlevel}}</td>
+                          <td>{{i.user_gender}}</td>
+                          <td>{{i.yearlevel}}</td>
+                          <td>{{i.yearlevel}}</td>
+                          <td><a href="#">A</a></td>
+                          <td><a href="#">B</a></td>
+                          <td>{{i.name}}</td>
+                        </tr>
+                          
+                        {% endfor %}
+                        </tbody> -->
+                    </table>
+                </div>
+
+                <div class="table-output">
+                  <table class="studentrecord__data">
+                    <thead>
+                      <tr>
+                        <th>ID Number</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Email</th>
+                        <th>College</th>
+                        <th>Course</th>
+                        <th>Year Level</th>
+                        <th>Gender</th>
+                        <th>Signed In</th>
+                        <th>Signed Out</th>
+                      </tr>
+                    </thead>
+                      <tbody class="table-body">
+                      </tbody>
+                  </table>
+                </div>
+            </div>
+          {% else %}
+            <p>No Records Available</p>
+          {% endif %}
+          </div>
+          <div class="pagination">
+            {% if users.has_previous %}
+              <a href="?page={{ event_data.previous_page_number }}">Previous</a>
+            {% endif %}
+            {% if users.has_next %}
+              <a href="?page={{ users.next_page_number }}">Next</a>
+            {% endif %}
+            <div class="page-number">
+              <h4>Page {{ users.number }} of {{ users.paginator.num_pages }}</h4>
+            </div>
+          </div>  
+        
+      </main>
+  <script src="{% static 'js/searchStudents.js' %}"></script>
+{% endblock %}

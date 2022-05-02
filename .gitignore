@@ -1,0 +1,14 @@
+data/
+captive/
+redis.conf/
+venv/
+captiveportal/__pycache__/
+dashboard/__pycache__/
+user/__pycache__/
+dashboard/migrations/
+user/migrations/
+.env
+.env.db
+cron.log
+mediafiles/mediafiles
+__pycache__

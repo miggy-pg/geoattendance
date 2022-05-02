@@ -1,0 +1,81 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Data Presentation
+{% endblock %}
+
+{% block name %}
+  / Data Presentation
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+    <script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js'></script>
+    
+    <!-- Total Students / Course (Bar Graph) 
+    Total Students / Arrived-on-time - Late (Pie Graph)
+    Total Students / Year Level (Bar Graph) -->
+    
+    <main>
+      <div class="data__container">
+        <div class="data__header">
+          <h1>Data Presentation</h1> 
+        </div>
+        <div style="display: flex;justify-content: space-around;">
+          <button id="printbargraph" class="print" style="cursor:pointer">Print Bargraph</button>
+          <button id="printpiegraph" class="print" style="cursor:pointer">Print Piegraph</button>
+          <button id="printlinegraph" class="print" style="cursor:pointer">Print Linegraph</button>
+        </div>
+
+        <div class="data_panels">
+          <div class="data__panels__left">
+            <div class="data__panels__left__title">
+              <div>
+                <h1>Total Students / Year Level</h1>
+                
+                <div class="bar">
+                  <canvas id="bargraph" width="400" height="400"></canvas>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        
+          <div class="data__panels__center">
+            <div class="data__panels__center__title">
+              <div>
+                <h1>Total Students / Course</h1>
+                
+                <div class="pie">
+                  <canvas id="piegraph" width="400" height="400"></canvas>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+          <div class="data__panels__right">
+            <div class="data__panels__right__title">
+              <div>
+                <h1>Time Table</h1>
+
+                <div class="line">
+                  <canvas id="linegraph" width="400" height="400"></canvas>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+{% endblock %}

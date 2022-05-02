@@ -1,0 +1,40 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Create Category
+{% endblock %}
+
+{% block name %}
+  / Create Category
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        <div class="event__container">
+          <div class="event__header">
+            <h1>Create Category</h1> 
+          </div>
+
+          <div class="event_panels">
+            <div class="event__panels__content">
+              <form class="event__form" method="POST">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                {% csrf_token %}
+                {{ category_form.as_p }}
+                <button id="event_submit" type="submit">Create</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+        
+      </main>
+{% endblock %}

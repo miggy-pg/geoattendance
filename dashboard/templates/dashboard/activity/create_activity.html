@@ -1,0 +1,44 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Create Activity
+{% endblock %}
+
+{% block name %}
+  / Create Activity
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+      <main>
+        <div class="event__container">
+          <div class="event__header">
+            <h1>Create Activity</h1> 
+          </div>
+          <div class="event__timetable">
+            <div class="event__time">  
+              <div class="activity__name">  
+                <form class="activity__form" method="POST">
+                  {% for message in messages %}
+                  <p>{{ message }}</p>
+                  {% endfor %}
+                  {% csrf_token %}
+                  {{ event_daily_form.as_p }}
+                  <button type="submit">Set Date</button>
+                </form>
+              </div>          
+
+            </div>
+          </div>
+        </div>
+
+        <!-- event__day -->
+
+      </main>
+{% endblock %}

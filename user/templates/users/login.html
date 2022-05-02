@@ -1,0 +1,70 @@
+{% extends 'users/base.html' %}
+{% load static %} 
+
+{% block content %}
+<body>   
+    <div class="container">
+        <div class="signin__container">
+            <div class="signin">   
+                <img src="{% static 'media/wifiattendance_logo.png'%}" alt="attendancesystem icon">
+                <form method="POST" action="{% url 'login' %}" class="sign-in-form" id="form">                    
+                    {% csrf_token %}
+                    {{ form }}
+                    <label>IP Address</label>
+                    <input type="text" id="ip">
+                    <button type="submit" id="submitBTN">Sign Up</button>                    
+                </form>
+
+                <h2 class="signup__text">Don't have an account yet?</h2>
+                <div class="signup__text-link">
+                    <a href="{% url 'register' %}" class="signup__link">Register here</a>
+                </div>
+
+                <h3 id="download-popup-btn" style="font-family:'Heebo'; color: #ffba00; text-align: center;">Download App Here</h3>
+
+                <!-- DOWNLOAD APPS BOX -->
+                <div class="download download-btn">
+                    <div class="download_description">
+                        Download Apps Here
+                    </div>
+                    <div style="width:165px;margin: 10px auto 0 auto; color: #ffba00;">
+                        <p style="font-family:'Heebo'; font-size: var(--small-font-size);">For Android :</p>
+                        <a href="{% static 'media/What-is-my-IP-address_v3.02_apkpure.com.apk'%}" style="color:#ffba00;">Click here</a>
+                    </div>
+                    <div style="width:165px;margin: 10px auto 0 auto; color: #ffba00;">
+                        <p style="font-family:'Heebo'; font-size: var(--small-font-size);">For iPhone:</p>
+                        <a href="{% static 'media/What-is-my-IP-address_v3.02_apkpure.com.apk'%}" style="color:#ffba00;">Click here</a>
+                    </div>
+                    <div class="download-buttons">
+                    <button id="close-popup-btn">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>   
+</body>
+<script>
+    document.querySelector('#submitBTN').addEventListener('click',(e)=>{
+        e.preventDefault()
+        id = document.querySelector('#id_user_idnumber').value
+        ip = document.querySelector('#ip').value
+
+        if(!id)
+        alert('Please Input Your IDNumber')
+        host = location.hostname
+        //add port 8000 if localhost
+        url =`http://${host}:8000/ip/${id}`
+        console.log(url)
+        fetch(url,{
+            method:'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({ip})
+        })
+
+        form = document.querySelector('#form')
+        form.submit()
+    })
+</script>
+{% endblock %}

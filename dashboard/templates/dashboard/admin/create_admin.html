@@ -1,0 +1,42 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Create Admin
+{% endblock %}
+
+{% block name %}
+  / Create Admin
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        <div class="event__container">
+          <div class="event__header">
+            <h1>Create Admin</h1> 
+          </div>
+
+          <div class="event_panels">
+            
+            <div class="event__panels__content">
+
+              <form class="event__form" method="POST">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                {% csrf_token %}
+                {{ admin_context.as_p }}
+                <button id="event_submit" type="submit">Add</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+        
+      </main>
+{% endblock %}

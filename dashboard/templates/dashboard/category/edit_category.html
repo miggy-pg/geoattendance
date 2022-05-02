@@ -1,0 +1,49 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  {% if category %}
+  | Edit {{ category.category_name }}
+  {% endif %}
+{% endblock %}
+
+{% block name %}
+  / Edit Category
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        <div class="event__container">
+        {% if category %}
+          <div class="event__header">
+            <h1 style="text-transform:uppercase">{{ category.category_name }}</h1>
+          </div>
+        {% endif %}
+
+          <div class="event_panels">
+            
+            <div class="event__panels__content">
+
+              <form class="event__form" method="POST">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                {% csrf_token %}
+                {{ category_form.as_p }}
+                <button id="event_submit" disabled="" type="submit">Update</button>
+              </form>
+              <div class="previous">
+                <button><a href="{% url 'view_category' %}">&laquo; Back</a></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+      </main>
+{% endblock %}

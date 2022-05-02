@@ -1,0 +1,39 @@
+{% extends 'users/base.html' %}
+{% load static %} 
+
+{% block content %}
+<body>   
+    <div class="signup__container"> 
+        <div class="signup">  
+            
+            <div class="registration__column">
+                <div class="left__form">
+                    <img src="{% static 'media/wifiattendance_logo.png'%}" alt="attendancesystem icon">
+                    <div class="links">
+                        <div class="signin__text-link">
+                            <h2>Already have an account?</h2>
+                            <a href="{% url 'login' %}">Login here</a>
+                        </div>                    
+                    </div>
+                </div>
+            </div> 
+
+            <div class="registration__column">
+                <div class="right__form">
+                    <div class="right__form__row">
+
+                    <h1>REGISTRATION</h1>
+                    <form  method="POST" class="container-form">
+                        {% csrf_token %}
+                        {{ form }}
+                        <button id="submit" type="submit">Sign up</button>
+                    </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>    
+</body>
+{% endblock %}

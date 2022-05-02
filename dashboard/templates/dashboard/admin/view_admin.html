@@ -1,0 +1,81 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | View Admin
+{% endblock %}
+
+{% block name %}
+  / View Admin
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        <div class="event__container">
+          <div class="event__header">
+            <h1>View Admin</h1> 
+          </div>
+
+          <div class="attendance__table">
+            {% if admin_data %}
+            <div class="table-users">    
+              <table class="attendance__data">
+                  <thead>
+                    <tr>
+                      <th>User ID</th>
+                      <th>Email</th>
+                      <th>First Name</th>
+                      <th>Last name</th>
+                      <th>Gender</th>
+                      <th>Staff</th>
+                      <th>Admin</th>
+                      <th>Date Joined</th>
+                      <th></th>
+                      <th></th>
+
+                    </tr>
+                  </thead>
+                    <tbody>
+                  {% for admin in admin_data %}
+                      {% if admin.is_admin and admin.is_staff %}
+                    <tr>
+                      <td>{{ admin.user_idnumber }}</td>
+                      <td>{{ admin.email }}</td>
+                      <td>{{ admin.user_fname }}</td>
+                      <td>{{ admin.user_lname }}</td>
+                      <td>{{ admin.user_gender }}</td>
+                      <td>{{ admin.staff }}</td>
+                      <td>{{ admin.admin }}</td>
+                      <td>{{ admin.date_joined }}</td>
+                      <td><a href="{% url 'edit_admin' admin.id %}">Edit</a></td>
+                      <td><a href="{% url 'delete_admin' admin.id %}">Delete</a></td>
+                    </tr>
+                    {% endif %}
+                  {% endfor %}
+                    
+                    </tbody>
+              </table>
+            </div>
+            {% else %}
+            <p>No Admin Available</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="pagination">
+          {% if admin_data.has_previous %}
+            <a href="?page={{ admin_data.previous_page_number }}">Previous</a>
+          {% endif %}
+          {% if admin_data.has_next %}
+            <a href="?page={{ admin_data.next_page_number }}">Next</a>
+          {% endif %}
+          <div class="page-number">
+            <h4>Page {{ admin_data.number }} of {{ admin_data.paginator.num_pages }}</h4>
+          </div>
+        </div>
+      </main>
+{% endblock %}

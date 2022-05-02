@@ -1,0 +1,131 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+<body>  
+  {% if user.is_authenticated %}
+  <div class="wrapper">
+    <!-- STUDENT INFO -->
+      <section class="header section bd-container">
+        <div class="header__container bd-grid">
+          <div class="header__data">
+              <h2>STUDENTS INFO</h2>
+              <h1 id="userid">{{ user.user_idnumber}}</h1>
+                <p><b>Name:</b> {{ user.get_full_name}}</p>    
+                <p><b>College:</b> {{ user.college}}</p>   
+                <p><b>Course:</b> {{ user.course}}</p>
+                <p><b>IP Address:
+                  <input style="border:0; padding: 3px; border-radius: 5px;" value={{ user.ip }} id="ip">
+                  <button style="font-size:11px; color:#d9d9d9; background-color:#0f3636; border-radius:5px; text-decoration:none; margin:10px 0 0 5px; padding:8px; border: 0;" id="applychanges"><b>Apply Changes</b></button>
+                </p></b>                                          
+            </div>
+          <div class="header__img">
+            <img src="{% static 'media/signin-out_icon.png' %}" style="cursor: pointer; background: green;" id="checkin-out" class="checkinout-background">
+          </div>
+        </div>
+      </section>
+      
+  <!-- EVENT INFO -->
+        <div class="event__background">
+          <div class="event__data event-grid">
+            <div class="event__img">
+            {% if event_info %}
+              {% for data in event_info %}
+                <img src="{{ data.event_logo.url }}" alt="eventlogo">
+              {% endfor %}
+            {% endif %}
+            </div>
+            
+            <div class="event__name">
+            {% if event_info %}
+              {% for data in event_info %}
+                <h2>{{ data.event_name }}</h2>
+                <p>{{ data.event_venue }}</p>
+                <p>{{ data.event_start|date:"M d,Y" }} to {{ data.event_end|date:"M d,Y" }} </p>
+              {% endfor %}
+            {% endif %}
+              </div>
+          </div>
+        </div>
+  <!-- SCHEDULE INFO -->
+        <div class="schedule">
+          <h2 class="schedule__day">DAY 1</h2>
+          <div id="slides" class="slides">
+            <span class="slide">
+              <table class="schedule__table">
+                <tbody> 
+                {% for schedule in get_activity %}
+                  <p>{{ schedule.id.event_name }}</p>
+                  <tr>
+                    <th>{{ schedule.event_start_time|date:"g:i a" }} -- {{ schedule.event_end_time|date:"g:i a" }}</th>
+                    <th>{{ schedule.event_activity }}</th>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </span>
+            <div class="feedback-btn">
+              <img src="{% static 'media/feedback_icon.png' %}" id="feedback-popup-btn">
+            </div>
+
+            <div class="logout-btn">
+              <img src="{% static 'media/logout_icon.png' %}" id="open-popup-btn">
+              {% if request.user.is_staff and request.user.is_admin %}
+              <a href="{% url 'dashboard' %}"><img style="padding: 5px;" src="{% static 'media/dashboard_icon.png' %}"></a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- LOGOUT MODAL BOX -->
+        <div class="popup logout-btn">
+          <div class="logout_description">
+            Are you sure you want to logout?
+          </div>
+          <div class="buttons">
+            <button id="cancel-popup-btn">Cancel</button>
+            <button id="logout-popup-btn">
+              <a class="logout-text-link" >Logout</a>
+            </button>
+          </div>
+        </div>
+
+        <!-- FEEDBACK MODAL BOX -->
+        <div class="feedback feedback-btn">
+          <div class="feedback_description">
+            You can send your concerns/feedback here!
+            <form action="" method= "POST" class="feedback-form">
+              {% csrf_token %}
+                <textarea cols="35" rows="7" name="feedback" placeholder="Type your concerns here." required></textarea><br/>
+              <div class="feedback_send">
+                <button id="send-popup-btn">Send</button>
+              </div>
+            </form>
+              <div class="feedback_cancel">
+                <button id="feedback-cancel-btn">Cancel</button>
+              </div>
+          </div>
+          
+        </div>
+  </div>
+  <script>
+    document.querySelector('#applychanges').addEventListener('click',(e)=>{
+      
+      id = localStorage.getItem('id')
+      ip = document.querySelector('#ip').value
+      host = location.hostname
+        //add port 8000 if localhost
+        url =`http://${host}:8000/ip/${id}`
+        console.log(url)
+        fetch(url,{
+            method:'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({ip})
+        }).then(()=>location.reload())
+    })
+  </script>
+  {% endif %}
+</body>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | View Activity
+{% endblock %}
+
+{% block name %}
+  / View Activity
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+      <main>
+        <div class="event__container">
+          <div class="event__header">
+            <h1>View Activity</h1> 
+          </div>
+        
+          <div class="event__table">
+          {% if event_day_data %}
+            <div class="table-users">    
+              <table class="attendance__data">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th></th>
+                      <th></th>
+                      <th>Event Date</th>
+                      <th>Signin time</th>
+                      <th>Signout time</th>
+                      <th>Event Name</th>
+                      <th></th>
+                      <th></th>
+
+                    </tr>
+                  </thead>
+                    <tbody>
+                  {% for day in event_day_data %}
+                    <tr>
+                      <td>
+                        <a class="event-click" data-id="{{ day.id }}" href="{% url 'active_activity' day.id %}" data-active="{{day.activity_active}}">Enable</a>
+                      </td>
+                      <td>
+                        <a class="event-click" data-id="{{ day.id }}" href="{% url 'inactive_activity' day.id %}" data-active="{{day.activity_active}}">Disable</a>
+                      </td>
+                      <td><a href="{% url 'create_timetable' day.id %}">Add Activities</a></td>
+                      <td>{{ day.event_day| date:"l - M d,Y"}}</td>
+                      <td>{{ day.daily_login_time }}</td>
+                      <td>{{ day.daily_logout_time }}</td>
+                      <td>{{ day.event_name }}</td>
+                      <td><a href="{% url 'edit_activity' day.id %}">Edit</a></td>
+                      <td><a href="{% url 'delete_activity' day.id %}">Delete</a></td>
+                    </tr>
+                  {% endfor %}
+                    
+                    </tbody>
+                </table>
+            </div>
+              {% else %}
+              <p>No Activity Available</p>
+              {% endif %}
+          </div>
+        </div>
+        <!-- event__day -->
+        <div class="pagination">
+          {% if event_day_data.has_previous %}
+            <a href="?page={{ event_day_data.previous_page_number }}">Previous</a>
+          {% endif %}
+          {% if event_day_data.has_next %}
+            <a href="?page={{ event_day_data.next_page_number }}">Next</a>
+          {% endif %}
+          <div class="page-number">
+            <h4>Page {{ event_day_data.number }} of {{ event_day_data.paginator.num_pages }}</h4>
+          </div>
+        </div>
+      </main>
+      <script>
+        active = document.querySelectorAll('a[data-active="True"]')
+        inactive = document.querySelectorAll('a[data-active="False"]')
+  
+        active.forEach(element => {
+  
+          if(element.innerHTML==='Enable'){
+            element.style.backgroundColor = 'green'
+            element.style.color = 'white'
+          }
+        });
+  
+        inactive.forEach(element => {
+  
+          if(element.innerHTML==='Disable'){
+            element.style.backgroundColor = 'red'
+            element.style.color = 'white'
+          }
+        });
+  
+      </script>
+{% endblock %}

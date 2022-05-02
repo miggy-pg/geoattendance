@@ -1,0 +1,108 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | View Event
+{% endblock %}
+
+{% block name %}
+  / View Event
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        <div class="event__container">
+          <div class="event__header">
+            <h1>View Event</h1> 
+          </div>
+
+          <div class="event__table">
+            {% if event_data %}
+            <div class="table-users">    
+              <table class="attendance__data">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th></th>
+                      <th>Event Logo</th>
+                      <th>Event Name</th>
+                      <th>Event Venue</th>
+                      <th>Event Category</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  
+                    <tbody>
+                    {% for info in event_data %}
+                    <tr>
+                      <td>
+                        <a class="event-click" id="{{info.id}}" href="{% url 'active_event' info.id %}" data-event-active={{info.event_active}}>Enable</a>
+                      </td>
+                      <td>
+                        <a class="event-click" id="{{info.id}}" href="{% url 'inactive_event' info.id %}" data-event-active={{info.event_active}}>Disable</a>
+                      </td>
+
+                      <td>
+                        <img src="{{ info.event_logo.url }}" alt="eventlogo" width="50px">
+                      </td>
+                      <td>{{ info.event_name }}</td>
+                      <td>{{ info.event_venue }}</td>
+                      <td>{{ info.event_category }}</td>
+                      <td>{{ info.event_start|date:"l - M d,Y" }}</td>
+                      <td>{{ info.event_end|date:"l - M d,Y" }}</td>
+                      <td><a href="{% url 'edit_event' info.id %}">Edit</a></td>
+                      <td><a href="{% url 'delete_event' info.id %}">Delete</a></td>
+                    </tr>
+                    {% endfor %}
+                    
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>No Event Available</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="pagination">
+          {% if event_data.has_previous %}
+            <a href="?page={{ event_data.previous_page_number }}">Previous</a>
+          {% endif %}
+          {% if event_data.has_next %}
+            <a href="?page={{ event_data.next_page_number }}">Next</a>
+          {% endif %}
+          <div class="page-number">
+            <h4>Page {{ event_data.number }} of {{ event_data.paginator.num_pages }}</h4>
+          </div>
+        </div>
+      </main>
+    <script>
+      active = document.querySelectorAll('a[data-event-active="True"]')
+      inactive = document.querySelectorAll('a[data-event-active="False"]')
+
+      active.forEach(element => {
+
+        if(element.innerHTML==='Enable'){
+          element.style.backgroundColor = 'green'
+          element.style.color = 'white'
+        }
+      });
+
+      inactive.forEach(element => {
+
+        if(element.innerHTML==='Disable'){
+          element.style.backgroundColor = 'red'
+          element.style.color = 'white'
+        }
+      });
+
+    </script>
+{% endblock %}

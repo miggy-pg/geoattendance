@@ -1,0 +1,205 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block dashboard %}
+ 
+{% endblock %}
+
+{% block content %}
+      <main>
+        
+        <div class="main__container">
+          <!-- MAIN TITLE STARTS -->
+          <div class="main__title">
+            <img src="{% static 'media/geoattendance_logo.png'%}" alt="" />
+              <div class="main__greeting">
+                <p>Logged in</p>
+                {% if user.is_authenticated and user.is_superuser %}
+                <h1>{{ user.get_full_name}}</h1>
+                {% endif %}
+              </div>
+          </div>
+          <div class="event__controller">
+            <div class="event">
+              <div class="event_inner">
+                  <p>Event Name</p>
+                {% if event %}
+                  {% for data in event %}
+                  <span>{{ data.event_name }}</span>
+                  {% endfor %} 
+                {% endif %}
+                <!-- remove this -->
+                <div class="overlay__edit">
+                  <div class="overlay__title overlay__edit--solid">
+                    <p class="overlay__text">Edit</p>
+                    <a href="create_event"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+            <div class="event">
+              <div class="event_inner">
+                <p>Venue</p>
+                {% if event %}
+                  {% for data in event %}
+                  <span>{{ data.event_venue }}</span>
+                  {% endfor %}
+                {% endif %}
+                <div class="overlay__edit">
+                  <div class="overlay__title overlay__edit--solid">
+                    <p class="overlay__text">Edit</p>
+                    <a href="create_event"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="event time_event">
+              <div class="event_inner">
+                <p>Login Time</p>
+                {% if event_day %}
+                  {% for login in event_day %}
+                  <span>{{ login.daily_login_time }}</span>
+                  {% endfor %}
+                {% endif %}
+
+                <div class="overlay__edit">
+                  <div class="overlay__title">
+                    <p class="overlay__text">Edit</p>
+                    <a href="{% url 'create_event' %}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="event time_event">
+              <div class="event_inner">
+                <p>Logout Time</p>
+              {% if event_day %}
+                {% for login in event_day %}
+                  <span>{{ login.daily_logout_time }}</span>
+                {% endfor %}
+              {% endif %}
+
+                <div class="overlay__edit">
+                  <div class="overlay__title overlay__edit--solid">
+                    <p class="overlay__text">Edit</p>
+                    <a href="{% url 'create_event' %}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAIN TITLE ENDS  -->
+          
+          <!-- PANELS STARTS HERE -->
+          <div class="panels">
+            <div class="panels__left">
+              <div class="panels__left__title">
+                <h1>Attendance Lists</h1>
+              </div>
+
+              <div class="panels__box">
+                <div class="box">
+                  <div class="box_inner">
+                    <p>Total Students</p>
+                    <span id="total_students">578</span>
+                  </div>
+                </div>
+    
+                <div class="box">
+                  <div class="box_inner">
+                    <p>On Time Today</p>
+                    <span id="ontime_today">340</span>
+                  </div>
+                </div>
+    
+                <div class="box">
+                  <div class="box_inner">
+                    <p>Late Today</p>
+                    <span>645</span>
+                  </div>
+                </div>
+              </div>
+               <!-- DASHBOARD TABLE -->
+              <div class="dashboard__attendance">
+                <table class="display" id="attendance_dashboard">
+                  <thead>
+                    <tr>
+                      <th>ID Number</th>
+                      <th>Last Name</th>
+                      <th>First Name</th>
+                      <th>College</th>
+                      <th>Course</th>
+                      <th>Year Level</th>
+                      <th>Gender</th>
+                      <th>Signed In</th>
+                      <th>Signed Out</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+            
+            <div class="panels__right">
+                <div class="panels__right__title">
+                    <h1>Event Schedule</h1>
+                </div>
+                <div class="dashboard__schedule">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <th>9:00PM -- 11:45AM</th>
+                          <th>MAIN STAGES: </th>
+                        </tr>
+                        <tr>
+                          <th>11:45 -- 12:45AM</th>
+                          <th>ABCDEFGHIJKLMNOPQRSTUVWXYZ</th>
+                        </tr>
+                        <tr>
+                          <th>12:45 -- 2:00PM</th>
+                          <th>BREAKOUT SESSIONS:</th>
+                        </tr>
+                        <tr>
+                          <th>2:15 -- 4:00PM</th>
+                          <th>BREAKOUT SESSIONS: </th>
+                        </tr>
+                        <tr>
+                          <th>4:30 -- 7:30PM</th>
+                          <th>OPEN STUDIOS</th>
+                        </tr>
+                        <tr>
+                          <th>4:30 -- 7:30PM</th>
+                          <th>OPEN STUDIOS</th>
+                        </tr>
+                        <tr>
+                          <th>4:30 -- 7:30PM</th>
+                          <th>OPEN STUDIOS</th>
+                        </tr>
+                        <tr>
+                          <th>4:30 -- 7:30PM</th>
+                          <th>OPEN STUDIOS</th>
+                        </tr>
+                        <tr>
+                          <th>4:30 -- 7:30PM</th>
+                          <th>OPEN STUDIOS</th>
+                        </tr>
+                        <tr>
+                          <th>4:30 -- 7:30PM</th>
+                          <th>OPEN STUDIOS</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+                
+            </div>
+          </div>
+          <!-- CHARTS ENDS HERE -->
+        </div>
+      </main>
+
+{% endblock %}

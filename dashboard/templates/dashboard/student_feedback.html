@@ -1,0 +1,72 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Student Feedback
+{% endblock %}
+
+{% block name %}
+  / Student Feedback
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        
+        <div class="studentfeedback__container">
+          <div class="studentfeedback__header">
+            <h1>Student Feedback</h1>
+          </div>
+            <div class="studentfeedback__table">
+
+              {% if student_feedback %}
+
+                <div class="table-users">    
+                  <table class="studentfeedback__data">
+                      <thead>
+                        <tr>
+                          <th>ID Number</th>
+                          <th>Last Name</th>
+                          <th>First Name</th>
+                          <th>Message</th>
+                          <th>Sended On</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                        <tbody>
+                        {% for student in student_feedback %}
+                        <tr>
+                          <td>{{student.student_id.user_idnumber}}</td>
+                          <td>{{student.student_id.user_lname}}</td>
+                          <td>{{student.student_id.user_fname}}</td>
+                          <td>{{student.student_feedback}}</td>
+                          <td>{{student.student_sent}}</td>
+                          <td><a href="#">Reply</a></td>
+                        </tr>
+                        {% endfor %}   
+                        </tbody>
+                    </table>
+                </div>
+
+              {% else %}
+                <p>No Feedback Sent</p>
+              {% endif %}
+            </div>            
+          </div>
+          <div class="pagination">
+            {% if student_feedback.has_previous %}
+              <a href="?page={{ student_feedback.previous_page_number }}">Previous</a>
+            {% endif %}
+            {% if student_feedback.has_next %}
+              <a href="?page={{ student_feedback.next_page_number }}">Next</a>
+            {% endif %}
+            <div class="page-number">
+              <h4>Page {{ student_feedback.number }} of {{ student_feedback.paginator.num_pages }}</h4>
+            </div>
+          </div>  
+      </main>
+{% endblock %}

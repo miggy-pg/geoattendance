@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="signin-signup">
+        <form action="POST" class="sign-up-form">
+            <h2 class="title">You are now Logged Out</h2>
+
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+                <img src="{% static 'media/username_icon.png'%}" alt="username icon">
+                <input type="text" placeholder="Username">
+            </div>
+            <div class="input-field">
+                <img src="{% static 'media/password_icon.png'%}" alt="password icon">
+                <input type="password" placeholder="Password">
+            </div>
+            <input type="submit" value="Login" class="btn solid">
+        </form>
+    </div>
+</body>
+</html>

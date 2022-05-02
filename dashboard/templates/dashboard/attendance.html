@@ -1,0 +1,135 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+  | Attendance
+{% endblock %}
+
+{% block name %}
+  / Attendance
+{% endblock %}
+
+{% block dashboard %}
+  Dashboard
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+      <main>
+        <div class="attendance__container">
+          <div class="attendance__header">
+            <div class="attendance_wrap attendance_wrap_4">
+              <div class="attendance_box">
+                <h1>Attendance</h1>
+                <!-- <input type="text" id="searchField" class="input" placeholder="Search"> -->
+              </div>
+            </div>
+          </div>
+          <div class="attendance__table">
+            <table class="display" id="table">
+              <thead>
+                <tr>
+                  <th>ID Number</th>
+                  <th>Last Name</th>
+                  <th>First Name</th>
+                  <th>College</th>
+                  <th>Course</th>
+                  <th>Year Level</th>
+                  <th>Gender</th>
+                  <th>Signed In</th>
+                  <th>Signin Status</th>
+                  <th>Signed Out</th>
+                  <th>Signout Status</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          
+          <!-- <div class="attendance__container">
+            <div class="attendance__header">
+            {% if users %}
+            <div class="attendance_wrap attendance_wrap_4">
+              <div class="attendance_box">
+                <h1>Attendance</h1>
+                <input type="text" id="searchField" class="input" placeholder="Search">
+              </div>
+            </div>
+                
+            </div>
+              <div class="attendance__table">
+                  <div class="table-users">    
+                    <table class="attendance__data">
+                        <thead>
+                          <tr>
+                            <th>ID Number</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>College</th>
+                            <th>Course</th>
+                            <th>Year Level</th>
+                            <th>Gender</th>
+                            <th>Signed In</th>
+                            <th>Signed Out</th>
+                          </tr>
+                        </thead>
+                          <tbody>
+                          {% for i in users %}
+                          <tr>
+                            <td>{{ i.user_idnumber }}</td>
+                            <td>{{ i.user_lname }}</td>
+                            <td>{{ i.user_fname }}</td>
+                            <td>{{ i.college }}</td>
+                            <td>{{ i.course }}</td>
+                            <td>{{ i.yearlevel }}</td>
+                            <td>{{ i.user_gender }}</td>
+                            <td>{{ i.user_idnumber }}</td>
+                            <td>{{ i.user_idnumber }} </td>
+                          {% endfor %}
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+  
+                  <div class="table-output">
+                    <table class="attendance__data">
+                      <thead>
+                        <tr>
+                          <th>ID Number</th>
+                          <th>Last Name</th>
+                          <th>First Name</th>
+                          <th>College</th>
+                          <th>Course</th>
+                          <th>Year Level</th>
+                          <th>Gender</th>
+                          <th>Signed In</th>
+                          <th>Signed Out</th>
+                        </tr>
+                      </thead>
+                        <tbody class="table-body">
+                        </tbody>
+                    </table>
+                  </div>
+  
+              </div>
+            {% else %}
+              <p>No Records Available</p>
+              
+            {% endif %}
+            </div>
+            <div class="pagination">
+              {% if users.has_previous %}
+                <a href="?page={{ event_data.previous_page_number }}">Previous</a>
+              {% endif %}
+              {% if users.has_next %}
+                <a href="?page={{ users.next_page_number }}">Next</a>
+              {% endif %}
+              <div class="page-number">
+                <h4>Page {{ users.number }} of {{ users.paginator.num_pages }}</h4>
+              </div>
+            </div>     -->
+        </div>
+        
+      </main>
+  <!-- <script src="{% static 'js/searchStudents.js' %}"></script> -->
+{% endblock %}
