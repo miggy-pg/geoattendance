@@ -1,6 +1,7 @@
 # GeoAttendance
 CRONJOB
 FOLLOW THE STEPS BELOW
+Cancel changes
 Run docker exec -it geoattendance-dev_web_1 bash
 Install cron in docker apt-get install cron
 Install nano text editor in docker apt-get install nano
