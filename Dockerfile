@@ -10,7 +10,6 @@ WORKDIR /app
 RUN pip install pipenv
 RUN python -m venv /opt/venv
 
-
 #Run to test in local
 RUN pip install pip --upgrade && \
     pip install -r requirements.txt && \

@@ -13,14 +13,6 @@ $("#id_college").change(function () {
     });
 });
 
-/* === DOWNLOAD APP BOX === */
-document.getElementById("download-popup-btn").addEventListener("click",function(){
-document.getElementsByClassName("download")[0].classList.add("active");
-});
-document.getElementById("close-popup-btn").addEventListener("click",function(){
-document.getElementsByClassName("download")[0].classList.remove("active");
-});
-
 /* ==== FEEDBACK BOX ==== */
 document.getElementById("feedback-popup-btn").addEventListener("click",function(){
 document.getElementsByClassName("feedback")[0].classList.add("active");

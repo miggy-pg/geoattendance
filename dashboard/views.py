@@ -515,7 +515,3 @@ def delete_timetable(request, pk):
             "POST",
         ]
     )
-
-
-def students_attendance_summary(request):
-    pass

@@ -21,14 +21,15 @@
             <div class="attendance_wrap attendance_wrap_4">
               <div class="attendance_box">
                 <h1>Attendance</h1>
-                <!-- <input type="text" id="searchField" class="input" placeholder="Search"> -->
               </div>
             </div>
           </div>
           <div class="attendance__table">
             <table class="display" id="table">
+              <input type="text" class="form-control" id="refreshTimer" disabled placeholder="???">
               <thead>
                 <tr>
+                  <th>IP Address</th>
                   <th>ID Number</th>
                   <th>Last Name</th>
                   <th>First Name</th>
@@ -45,91 +46,68 @@
               </thead>
             </table>
           </div>
-          
-          <!-- <div class="attendance__container">
-            <div class="attendance__header">
-            {% if users %}
-            <div class="attendance_wrap attendance_wrap_4">
-              <div class="attendance_box">
-                <h1>Attendance</h1>
-                <input type="text" id="searchField" class="input" placeholder="Search">
-              </div>
-            </div>
-                
-            </div>
-              <div class="attendance__table">
-                  <div class="table-users">    
-                    <table class="attendance__data">
-                        <thead>
-                          <tr>
-                            <th>ID Number</th>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>College</th>
-                            <th>Course</th>
-                            <th>Year Level</th>
-                            <th>Gender</th>
-                            <th>Signed In</th>
-                            <th>Signed Out</th>
-                          </tr>
-                        </thead>
-                          <tbody>
-                          {% for i in users %}
-                          <tr>
-                            <td>{{ i.user_idnumber }}</td>
-                            <td>{{ i.user_lname }}</td>
-                            <td>{{ i.user_fname }}</td>
-                            <td>{{ i.college }}</td>
-                            <td>{{ i.course }}</td>
-                            <td>{{ i.yearlevel }}</td>
-                            <td>{{ i.user_gender }}</td>
-                            <td>{{ i.user_idnumber }}</td>
-                            <td>{{ i.user_idnumber }} </td>
-                          {% endfor %}
-                          </tr>
-                          </tbody>
-                      </table>
-                  </div>
-  
-                  <div class="table-output">
-                    <table class="attendance__data">
-                      <thead>
-                        <tr>
-                          <th>ID Number</th>
-                          <th>Last Name</th>
-                          <th>First Name</th>
-                          <th>College</th>
-                          <th>Course</th>
-                          <th>Year Level</th>
-                          <th>Gender</th>
-                          <th>Signed In</th>
-                          <th>Signed Out</th>
-                        </tr>
-                      </thead>
-                        <tbody class="table-body">
-                        </tbody>
-                    </table>
-                  </div>
-  
-              </div>
-            {% else %}
-              <p>No Records Available</p>
-              
-            {% endif %}
-            </div>
-            <div class="pagination">
-              {% if users.has_previous %}
-                <a href="?page={{ event_data.previous_page_number }}">Previous</a>
-              {% endif %}
-              {% if users.has_next %}
-                <a href="?page={{ users.next_page_number }}">Next</a>
-              {% endif %}
-              <div class="page-number">
-                <h4>Page {{ users.number }} of {{ users.paginator.num_pages }}</h4>
-              </div>
-            </div>     -->
         </div>
-        
       </main>
-  <!-- <script src="{% static 'js/searchStudents.js' %}"></script> -->
+
+    <script>
+      // Refresh Rate is how often you want to refresh the page 
+    // bassed off the user inactivity. 
+    var refresh_rate = 61; //<-- In seconds, change to your needs
+    var last_user_action = 0;
+    var has_focus = false;
+    var lost_focus_count = 0;
+    // If the user loses focus on the browser to many times 
+    // we want to refresh anyway even if they are typing. 
+    // This is so we don't get the browser locked into 
+    // a state where the refresh never happens.    
+    var focus_margin = 10;
+
+    // Reset the Timer on users last action
+    function reset() {
+      last_user_action = 0;
+      updateVisualTimer('Reset Timer');
+    }
+
+    function updateVisualTimer(value) {
+      var element = document.getElementById('refreshTimer');
+      if (value) {
+        element.value = value
+      } else if (has_focus) {
+        element.value = 'User has focuse won\'t refresh'
+      } else if (last_user_action >= refresh_rate) {
+        element.value = 'Refreshing';
+      } else {
+        element.value = (refresh_rate - last_user_action);
+      }
+    }
+
+    function windowHasFocus() {
+      has_focus = true;
+    }
+
+    function windowLostFocus() {
+      has_focus = false;
+      lost_focus_count++;
+      console.log(lost_focus_count + " <~ Lost Focus");
+    }
+
+    // Count Down that executes ever second
+    setInterval(function() {
+      last_user_action++;
+      refreshCheck();
+      updateVisualTimer();
+    }, 1000);
+
+    // The code that checks if the window needs to reload
+    function refreshCheck() {
+      var focus = window.onfocus;
+      if ((last_user_action >= refresh_rate && !has_focus && document.readyState == "complete") || lost_focus_count > focus_margin) {
+        window.location.reload(); // If this is called no reset is needed
+        reset(); // We want to reset just to make sure the location reload is not called.
+      }
+    }
+    window.addEventListener("blur", windowLostFocus, false);
+    window.addEventListener("keypress", reset, false);
+    window.addEventListener("scroll", reset, false);
+   </script>
 {% endblock %}

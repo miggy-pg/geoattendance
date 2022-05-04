@@ -51,11 +51,13 @@ def present(request):
         data = students.values()
         return JsonResponse(list(data), safe=False)
 
+
 def ip(request,pk): 
     if request.method == 'POST':
         print(request.body)
         User.objects.filter(user_idnumber=pk).update(ip=json.loads(request.body).get('ip'))
         return HttpResponse(status=201)
+
 
 @login_required(redirect_field_name=None)
 def search_students(request): 

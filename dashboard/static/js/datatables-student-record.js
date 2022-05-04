@@ -1,5 +1,16 @@
 $(document).ready(async function() {
 
+    const formatTime = (time) =>{
+        time = time.split(":")
+        hour = parseInt(time[0])
+        AmOrPm = hour >= 12 ? 'pm' : 'am';
+        hour = (hour % 12) || 12
+        minutes = time[1].length<2?`0${time[1]}`:time[1] // starts with zero if minutes only one digit
+
+        formattedTime = `${hour}:${minutes} ${AmOrPm}`
+        return formattedTime
+    }
+
     res = await fetch('http://' + window.location.host +'/students/')
     var dataSet = await res.json();  
     var dataSet = dataSet.map((x) => {
@@ -14,51 +25,38 @@ $(document).ready(async function() {
     
     $('#student_record_table').DataTable( {
         dom: 'Bfrtip',      // The B is the Buttons extension and it tell DataTables where to put each element in the DOM that it creates
-        searching: false,       //hide search bar
         data: dataSet,      //import dataset
         createdRow: function(row, data, dataIndex) {
             $(row).attr('data-id', data.user_idnumber);
         },
         columns: [
+            { "data": "ip" },
             { "data": "user_idnumber" },
-            { "data": "user_lname" },
             { "data": "user_fname" },
-            { "data": "email" },
+            { "data": "user_lname" },
             { "data": "college" },
             { "data": "course" },
             { "data": "yearlevel" },
             { "data": "user_gender" },
-            { "data": "yearlevel" },
-            { "data": "yearlevel" },
-        ],
-        buttons: [
+            { "data": "timein" } ,
+            { "data": "timein_status" },
+            { "data": "timeout" },
+            { "data": "timeout_status" },
+            { "data": "status" }
         ],
         "columnDefs":
-           [
-               {
-                   "targets": [3],      //remove college column
-                   "visible": false,
-                   "searchable": false,
-               },
-               {
-                    "targets": [6],     //remove gender column
-                    "visible": false,
-                    "searchable": false,
-                },
-                {
-                    "targets":[10],
-                    "defaultContent": "<a href='#'>A</a>"
-                },
-                {
-                    "targets":[11],
-                    "defaultContent": "<a href='#'>B</a>"
-                },
-                {   "className": "dt-center",   // align text center
-                    "targets": "_all"
-                },
-           ],
-           buttons: [
-            'excel', 'pdf','csv','print','colvis'
+        [
+             {   "className": "dt-center",   // align text center
+                 "targets": "_all"
+             },
+        ],
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+            'csv','print','colvis',
         ],
     } );
 });

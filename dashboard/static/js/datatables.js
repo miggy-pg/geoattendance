@@ -29,6 +29,7 @@ $(document).ready(async function() {
             $(row).attr('data-id', data.user_idnumber);
         },
         columns: [
+            { "data": "ip" },
             { "data": "user_idnumber" },
             { "data": "user_fname" },
             { "data": "user_lname" },
@@ -36,38 +37,25 @@ $(document).ready(async function() {
             { "data": "course" },
             { "data": "yearlevel" },
             { "data": "user_gender" },
-            { "data": "timein",
-                render: function ( data, type, row ) {
-                    return row.timein + '(' + row.timein_status + ')';
-                }
-            },
+            { "data": "timein" },
             { "data": "timein_status" },
-            { "data": "timeout",
-                render: function ( data, type, row ) {
-                    return row.timeout + '(' + row.timeout_status + ')';
-                }
-            },
+            { "data": "timeout" },
             { "data": "timeout_status" },
             { "data": "status" }
         ],
         "columnDefs":
         [
-            {
-                "targets": [8],      //hide signin_status column
-                "visible": false,
-                "searchable": false,
-            },
-            {
-                 "targets": [10],     //hide signout_status column
-                 "visible": false,
-                 "searchable": false,
-             },
              {   "className": "dt-center",   // align text center
                  "targets": "_all"
              },
         ],
         buttons: [
-            'excel', 'pdf','csv','print','colvis'
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+            'csv','print','colvis',
         ],
     } );
     
