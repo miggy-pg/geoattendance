@@ -30,9 +30,11 @@
                 {% endif %}
                 <!-- remove this -->
                 <div class="overlay__edit">
-                  <div class="overlay__title overlay__edit--solid">
+                  <div class="overlay__title overlay__edit margin-bot">
                     <p class="overlay__text">Edit</p>
-                    <a href="create_event"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% for data in event %}
+                    <a href="{% url 'edit_event' data.id%}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
@@ -48,9 +50,11 @@
                   {% endfor %}
                 {% endif %}
                 <div class="overlay__edit">
-                  <div class="overlay__title overlay__edit--solid">
+                  <div class="overlay__title overlay__edit margin-bot">
                     <p class="overlay__text">Edit</p>
-                    <a href="create_event"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% for data in event %}
+                    <a href="{% url 'edit_event' data.id %}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
@@ -61,14 +65,16 @@
                 <p>Login Time</p>
                 {% if event_day %}
                   {% for login in event_day %}
-                  <span>{{ login.daily_login_time }}</span>
+                  <span>{{ login.daily_login_time|time:"g:iA"|upper }}</span>
                   {% endfor %}
                 {% endif %}
 
                 <div class="overlay__edit">
-                  <div class="overlay__title">
+                  <div class="overlay__title overlay__edit">
                     <p class="overlay__text">Edit</p>
-                    <a href="{% url 'create_event' %}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% for login in event_day %}
+                    <a href="{% url 'edit_activity' login.id %}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
@@ -79,14 +85,16 @@
                 <p>Logout Time</p>
               {% if event_day %}
                 {% for login in event_day %}
-                  <span>{{ login.daily_logout_time }}</span>
+                  <span>{{ login.daily_logout_time|time:"g:iA"|upper }}</span>
                 {% endfor %}
               {% endif %}
 
                 <div class="overlay__edit">
-                  <div class="overlay__title overlay__edit--solid">
+                  <div class="overlay__title overlay__edit">
                     <p class="overlay__text">Edit</p>
-                    <a href="{% url 'create_event' %}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% for login in event_day %}
+                    <a href="{% url 'edit_activity' login.id%}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
@@ -106,21 +114,28 @@
                 <div class="box">
                   <div class="box_inner">
                     <p>Total Students</p>
-                    <span id="total_students">578</span>
+                    <span id="total_students"></span>
                   </div>
                 </div>
     
                 <div class="box">
                   <div class="box_inner">
-                    <p>On Time Today</p>
-                    <span id="ontime_today">340</span>
+                    <p>Early Today</p>
+                    <span id="early_today"></span>
                   </div>
                 </div>
     
                 <div class="box">
                   <div class="box_inner">
                     <p>Late Today</p>
-                    <span>645</span>
+                    <span id="late_today">645</span>
+                  </div>
+                </div>
+
+                <div class="box">
+                  <div class="box_inner">
+                    <p>Signout Early</p>
+                    <span id="timeout_early"></span>
                   </div>
                 </div>
               </div>
@@ -129,16 +144,15 @@
                 <table class="display" id="attendance_dashboard">
                   <thead>
                     <tr>
-                      <th>ID Number</th>
-                      <th>Last Name</th>
-                      <th>First Name</th>
-                      <th>College</th>
-                      <th>Course</th>
-                      <th>Year Level</th>
-                      <th>Gender</th>
-                      <th>Signed In</th>
-                      <th>Signed Out</th>
-                      <th>Status</th>
+                      <th style="background-color: #474747; color: #fff;">ID Number</th>
+                      <th style="background-color: #474747; color: #fff;">Last Name</th>
+                      <th style="background-color: #474747; color: #fff;">First Name</th>
+                      <th style="background-color: #474747; color: #fff;">School</th>
+                      <th style="background-color: #474747; color: #fff;">Year Level</th>
+                      <th style="background-color: #474747; color: #fff;">Gender</th>
+                      <th style="background-color: #474747; color: #fff;">Signed In</th>
+                      <th style="background-color: #474747; color: #fff;">Signed Out</th>
+                      <th style="background-color: #474747; color: #fff;">Status</th>
                     </tr>
                   </thead>
                 </table>
@@ -147,51 +161,17 @@
             
             <div class="panels__right">
                 <div class="panels__right__title">
-                    <h1>Event Schedule</h1>
+                    <h1>Activity Schedule</h1>
                 </div>
                 <div class="dashboard__schedule">
                     <table>
                       <tbody>
+                        {% for activity in daily_schedule %}
                         <tr>
-                          <th>9:00PM -- 11:45AM</th>
-                          <th>MAIN STAGES: </th>
+                          <th>{{ activity.event_start_time|time:"g:iA"|upper}} ━ {{ activity.event_end_time|time:"g:iA"|upper}}</th>
+                          <th>{{ activity.event_activity }}</th>
                         </tr>
-                        <tr>
-                          <th>11:45 -- 12:45AM</th>
-                          <th>ABCDEFGHIJKLMNOPQRSTUVWXYZ</th>
-                        </tr>
-                        <tr>
-                          <th>12:45 -- 2:00PM</th>
-                          <th>BREAKOUT SESSIONS:</th>
-                        </tr>
-                        <tr>
-                          <th>2:15 -- 4:00PM</th>
-                          <th>BREAKOUT SESSIONS: </th>
-                        </tr>
-                        <tr>
-                          <th>4:30 -- 7:30PM</th>
-                          <th>OPEN STUDIOS</th>
-                        </tr>
-                        <tr>
-                          <th>4:30 -- 7:30PM</th>
-                          <th>OPEN STUDIOS</th>
-                        </tr>
-                        <tr>
-                          <th>4:30 -- 7:30PM</th>
-                          <th>OPEN STUDIOS</th>
-                        </tr>
-                        <tr>
-                          <th>4:30 -- 7:30PM</th>
-                          <th>OPEN STUDIOS</th>
-                        </tr>
-                        <tr>
-                          <th>4:30 -- 7:30PM</th>
-                          <th>OPEN STUDIOS</th>
-                        </tr>
-                        <tr>
-                          <th>4:30 -- 7:30PM</th>
-                          <th>OPEN STUDIOS</th>
-                        </tr>
+                        {% endfor %}
                       </tbody>
                     </table>
                 </div>

@@ -13,11 +13,15 @@
               <h1 id="userid">{{ user.user_idnumber}}</h1>
                 <p><b>Name:</b> {{ user.get_full_name}}</p>    
                 <p><b>College:</b> {{ user.college}}</p>   
-                <p><b>Course:</b> {{ user.course}}</p>
-                <p><b>IP Address:
-                  <input style="border:0; padding: 3px; border-radius: 5px;" value={{ user.ip }} id="ip">
-                  <button style="font-size:11px; color:#d9d9d9; background-color:#0f3636; border-radius:5px; text-decoration:none; margin:10px 0 0 5px; padding:8px; border: 0;" id="applychanges"><b>Apply Changes</b></button>
-                </p></b>                                          
+                <p><b>Course:</b> {{ user.course}}</p>                                         
+                <p><b>Status:</b></p>
+              {% if user.status == "Offline" %}  
+                <p style="font-size: 1rem;">{{ user.status }}</p> 
+              {% elif user.timeout_status == "On Time" %}
+                <p style="font-size: 1rem;">{{ user.timeout_status }}</p>
+              {% else %}
+                <p style="font-size: 1rem;">{{ user.timein_status }}</p>
+              {% endif %}                                        
             </div>
           <div class="header__img">
             <img src="{% static 'media/signin-out_icon.png' %}" style="cursor: pointer; background: green;" id="checkin-out" class="checkinout-background">
@@ -41,7 +45,7 @@
               {% for data in event_info %}
                 <h2>{{ data.event_name }}</h2>
                 <p>{{ data.event_venue }}</p>
-                <p>{{ data.event_start|date:"M d,Y" }} to {{ data.event_end|date:"M d,Y" }} </p>
+                <p>{{ data.event_start|date:"M d,Y" }} </p>
               {% endfor %}
             {% endif %}
               </div>
@@ -57,7 +61,7 @@
                 {% for schedule in get_activity %}
                   <p>{{ schedule.id.event_name }}</p>
                   <tr>
-                    <th>{{ schedule.event_start_time|date:"g:i a" }} -- {{ schedule.event_end_time|date:"g:i a" }}</th>
+                    <th>{{ schedule.event_start_time|time:"g:iA"|upper}}  ━  {{ schedule.event_end_time|time:"g:iA"|upper}}</th>
                     <th>{{ schedule.event_activity }}</th>
                   </tr>
                 {% endfor %}
@@ -70,7 +74,7 @@
 
             <div class="logout-btn">
               <img src="{% static 'media/logout_icon.png' %}" id="open-popup-btn">
-              {% if request.user.is_staff and request.user.is_admin %}
+              {% if request.user.is_staff or request.user.is_admin %}
               <a href="{% url 'dashboard' %}"><img style="padding: 5px;" src="{% static 'media/dashboard_icon.png' %}"></a>
               {% endif %}
             </div>
@@ -107,24 +111,6 @@
           </div>
         </div>
   </div>
-  <script>
-    document.querySelector('#applychanges').addEventListener('click',(e)=>{
-      
-      id = localStorage.getItem('id')
-      ip = document.querySelector('#ip').value
-      host = location.hostname
-        //add port 8000 if localhost
-        url =`http://${host}:8000/ip/${id}`
-        console.log(url)
-        fetch(url,{
-            method:'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body:JSON.stringify({ip})
-        }).then(()=>location.reload())
-    })
-  </script>
   {% endif %}
 </body>
 {% endblock %}

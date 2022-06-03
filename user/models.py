@@ -82,9 +82,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         choices=GENDER_CHOICES, 
         verbose_name="Gender"
         )
-    college = models.CharField(
-        max_length=50,
-        default="College of Computer Studies", 
+    school = models.CharField(
+        max_length=50, 
         blank=False, 
         null=False
         )
@@ -94,23 +93,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         ("BSCA", "BS in Computer Application"), 
         ("BSCS", "BS in Computer Science"), 
     )
-    course = models.CharField(
-        max_length=50, 
-        choices=COURSE_CHOICES, 
-        blank=False
-    )
-    FIRST_YEAR = 1
-    SECOND_YEAR = 2
-    THIRD_YEAR = 3
-    FOURTH_YEAR = 4
-    OTHERS = 5
+    GRADE_SEVEN = 7
+    GRADE_EIGHT = 8
+    GRADE_NINE = 9
+    GRADE_TEN = 10
+    GRADE_ELEVEN = 11
+    GRADE_TWELVE = 12
 
     YEAR_CHOICES =(
-        (FIRST_YEAR, '1'),
-        (SECOND_YEAR, '2'),
-        (THIRD_YEAR, '3'),
-        (FOURTH_YEAR, '4'),
-        (OTHERS, 'Others'),
+        (GRADE_SEVEN, '7'),
+        (GRADE_EIGHT, '8'),
+        (GRADE_NINE, '9'),
+        (GRADE_TEN, '10'),
+        (GRADE_ELEVEN, '11'),
+        (GRADE_TWELVE, '12'),
     )
     yearlevel = models.IntegerField(
         choices=YEAR_CHOICES, 
@@ -133,6 +129,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         auto_now_add=False,
         null=True,
         verbose_name="Time out"
+    )
+    prev_timeout = models.TimeField(
+        auto_now=False, 
+        auto_now_add=False,
+        null=True,
+        verbose_name="Previous Time out"
     )
     timein_status = models.CharField(
         max_length=50,

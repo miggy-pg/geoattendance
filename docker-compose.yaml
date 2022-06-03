@@ -12,18 +12,20 @@ services:
   db:
     image: postgres
     volumes:
-      - ./data/db:/var/lib/postgresql/data
-    env_file:
-      - ./.env.db
+       - data:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    ports:
+      - 5432:5432
 
   web:
     build: .
     image: geoattendance
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-    ports:
-      - 8000:8000
+    network_mode: host
+    # ports:
+    #   - '192.168.1.4:8000:8000'
     env_file:
       - ./.env
     depends_on:
@@ -39,3 +41,7 @@ services:
     volumes:
       - ./captive/static:/var/www/static
       - ./captive/media:/var/www/media
+
+volumes:
+  data:
+    external: true

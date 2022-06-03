@@ -5,10 +5,16 @@ document.addEventListener("DOMContentLoaded",async function(event) {
     res = await fetch('http://' + window.location.host +'/students/')
     students = await res.json()
     me = students.find( ({user_idnumber})=> user_idnumber===localStorage.getItem('id') )
+    console.log('this me', me)
+    console.log('this me', me.timein)
+    console.log('this metimeout', me.timeout)
+    console.log('this last_login', me.last_login)
     if(me.timein){
         document.querySelector('#checkin-out').classList.add('signedin')
         document.querySelector('#checkin-out').style.background = 'red'
     }
+
+
 
 
     var ws_scheme = (window.location.protocol === 'https:' ? 'wss' : 'ws') 
@@ -22,10 +28,8 @@ document.addEventListener("DOMContentLoaded",async function(event) {
     // 3
     socket.onopen = function (e) {
         console.log("open", e);
-        ip = document.querySelector('#ip').value
         socket.send(JSON.stringify({
             'action':'present',
-            'ip':ip,
             'id':localStorage.getItem('id')
         }))
     }
@@ -41,6 +45,7 @@ document.addEventListener("DOMContentLoaded",async function(event) {
     socket.onmessage = function (e) {
         var data = JSON.parse(e.data)
         console.log("data:", data)
+        console.log("this data message", data.message)
         id = localStorage.getItem('id')
         if(data.message && data.id == id){
             document.querySelector('#checkin-out').classList.add('signedin')
@@ -71,14 +76,13 @@ document.addEventListener("DOMContentLoaded",async function(event) {
         }))
     })
 
-
     document.querySelector('.logout-text-link').addEventListener('click',()=>{
         socket.send(JSON.stringify({
             'action':'unpresent',
             'id':localStorage.getItem('id')
         }))
-      localStorage.removeItem('id')
-      console.log(window.location.host)
-      window.location.href = window.location.host + '/user/logout/'
-  })
+        localStorage.removeItem('id')
+        console.log(window.location.host)
+        window.location.href = window.location.host + '/user/logout/'
+    })
 });

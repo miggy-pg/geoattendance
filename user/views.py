@@ -1,5 +1,7 @@
 import json
 import os 
+import platform
+import subprocess
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import (
@@ -16,8 +18,6 @@ from django.views.generic import (
     CreateView, 
     FormView
 )
-from ipware import get_client_ip
-# from ipware.ip import get_real_ip
 
 from user.decorators import student_only
 from dashboard.models import (
@@ -43,41 +43,23 @@ def students(request):
         students = User.objects.all()
         data = students.values()
         return JsonResponse(list(data), safe=False)
+        
 
-
-def present(request): 
-    if request.method == 'GET':
-        students = User.objects.filter(present=True)
-        data = students.values()
-        return JsonResponse(list(data), safe=False)
-
-
-def ip(request,pk): 
-    if request.method == 'POST':
-        print(request.body)
-        User.objects.filter(user_idnumber=pk).update(ip=json.loads(request.body).get('ip'))
-        return HttpResponse(status=201)
-
-
-@login_required(redirect_field_name=None)
-def search_students(request): 
-    if request.method == 'POST':
-        search_str = json.loads(request.body).get('searchText')
-        students = User.objects.filter(
-            user_fname__icontains = search_str
-            ) | User.objects.filter(
-                user_lname__icontains = search_str
-                ) | User.objects.filter(
-                    user_idnumber__istartswith = search_str
-                    ) | User.objects.filter(
-                        email__icontains = search_str
-                        )  
-        data = students.values()
-        return JsonResponse(list(data), safe=False)
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 
 @login_required(redirect_field_name=None)
 def index(request):
+    ip = get_client_ip(request)
+
+    name = request.user
+    print("IP", ip, 'Name', name)
     event_info = Event.objects.filter(Q(event_active='True'))
 
     get_eventday = EventDay.objects.filter(Q(activity_active='True'))
@@ -91,21 +73,15 @@ def index(request):
 
     all_eventday = EventDay.objects.all()
     print('this all eventday', all_eventday)
+    
+    all_offline = User.objects.filter(status="Offline")
+    print('this all offline', all_offline)
 
-    client_ip, is_routable = get_client_ip(request)
-    if client_ip is None:
-        client_ip = "0.0.0.0"
-    else:
-        # We got the client's IP address
-        if is_routable:
-            # The client's IP address is publicly routable on the Internet
-            ipv = "Public"
-        else:
-            # The client's IP address is private
-            ipv = "Private"
-    print(client_ip, ipv)
     if request.user.is_authenticated:
         User.objects.filter(user_idnumber=request.user.user_idnumber).update(present=True)
+        User.objects.filter(user_idnumber=request.user.user_idnumber).update(ip=ip)
+    else:
+        User.objects.filter(user_idnumber=request.user.user_idnumber).update(present=False)
 
     if request.method == "POST":
         if request.user.is_authenticated:

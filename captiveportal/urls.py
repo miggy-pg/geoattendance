@@ -16,10 +16,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     url(r"user/", include("user.urls"), name="user"),
     url(r"dashboard/", include("dashboard.urls"), name="dashboard"),
-    url(r"search-students", csrf_exempt(views.search_students), name="search_students"),
     url(r"students", csrf_exempt(views.students), name="students"),
-    url(r"present", csrf_exempt(views.present), name="present"),
-    path("ip/<pk>", csrf_exempt(views.ip), name="ip"),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

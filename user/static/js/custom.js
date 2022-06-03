@@ -1,4 +1,4 @@
-$("#id_college").change(function () {
+$("#id_school").change(function () {
     const url = $("#registerForm").attr("data-course-url");  // get the url of the `load_cities` view
     const countryId = $(this).val();  // get the selected country ID from the HTML input
 

@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime, timedelta
+import time
 import json
 import os
 
@@ -7,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.db.models import Q
 from django.http import (
     request,
     response,
@@ -51,25 +53,18 @@ from dashboard.filters import StudentFilter
 User = get_user_model()
 
 @login_required(login_url="login")
-def search_students(request):
-    if request.method == "POST":
-        search_str = json.loads(request.body).get("searchText")
-        students = (
-            User.objects.filter(user_fname__icontains=search_str)
-            | User.objects.filter(user_lname__icontains=search_str)
-            | User.objects.filter(user_idnumber__istartswith=search_str)
-            | User.objects.filter(email__icontains=search_str)
-        )
-        data = students.values()
-        return JsonResponse(list(data), safe=False)
-
-
-@login_required(login_url="login")
 def dashboard(request):
-    event = Event.objects.all()
-    event_day = EventDay.objects.all()
-    daily_schedule = EventActivity.objects.all()
-    context = {"event": event, "daily_schedule": daily_schedule, "event_day": event_day}
+    event = Event.objects.filter(Q(event_active='True'))
+    event_day = EventDay.objects.filter(Q(activity_active='True'))
+    daily_schedule = EventActivity.objects.filter(event_day__activity_active=True)
+    day_event = EventDay.objects.filter(event_name__event_active=True)[0]
+    print('this day_event', day_event)
+    print('this day_event login and logout time', day_event.daily_login_time, day_event.daily_logout_time)
+    context = {
+        "event": event, 
+        "daily_schedule": daily_schedule, 
+        "event_day": event_day
+        }
     return render(request, "dashboard/dashboard.html", context)
 
 
@@ -98,73 +93,68 @@ class ChartData(APIView):
         """
         Return a list of all users.
         """
-        qbar_first = User.objects.filter(yearlevel__icontains=1).count()
-        qbar_second = User.objects.filter(yearlevel__icontains=2).count()
-        qbar_third = User.objects.filter(yearlevel__icontains=3).count()
-        qbar_fourth = User.objects.filter(yearlevel__icontains=4).count()
-        qbar_others = User.objects.filter(yearlevel__icontains=5).count()
-        labels_bar = ["First Year", "Second Year", "Third Year", "Fouth Year", "Others"]
-        items_bar = [qbar_first, qbar_second, qbar_third, qbar_fourth, qbar_others]
+        qbar_seven = User.objects.filter(yearlevel__icontains=7).count()
+        qbar_eight = User.objects.filter(yearlevel__icontains=8).count()
+        qbar_nine = User.objects.filter(yearlevel__icontains=9).count()
+        qbar_ten = User.objects.filter(yearlevel__icontains=10).count()
+        qbar_eleven = User.objects.filter(yearlevel__icontains=11).count()
+        qbar_twelve = User.objects.filter(yearlevel__icontains=12).count()
+        labels_bar = ["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
+        items_bar = [qbar_seven, qbar_eight, qbar_nine, qbar_ten, qbar_eleven, qbar_twelve]
 
-        qpie_bsit = User.objects.filter(course__icontains="BSIT").count()
-        qpie_bsis = User.objects.filter(yearlevel__icontains="BSIS").count()
-        qpie_bsca = User.objects.filter(yearlevel__icontains="BSCA").count()
-        qpie_bscs = User.objects.filter(yearlevel__icontains="BSCS").count()
+        # qpie_bsit = User.objects.filter(course__icontains="BSIT").count()
+        # qpie_bsis = User.objects.filter(course__icontains="BSIS").count()
+        # qpie_bsca = User.objects.filter(course__icontains="BSCA").count()
+        # qpie_bscs = User.objects.filter(course__icontains="BSCS").count()
         labels_pie = ["BSIT", "BSIS", "BSCA", "BSCS"]
-        items_pie = [qpie_bsit, qpie_bsis, qpie_bsca, qpie_bscs]
+        # items_pie = [qpie_bsit, qpie_bsis, qpie_bsca, qpie_bscs]
 
         # qline_early = User.objects.filter(status__icontains="Early").count()
         # qline_late = User.objects.filter(status__icontains="Late").count()
-        labels_line = ["Red", "Green", "Blue", "Orange"]
-        labels_line_early = ["Early"]
-        labels_line_late = ["Late"]
-        items_line_early = [1,5,20,40,50,60]
-        items_line_late = [10,20,1,15,20,30]
-        
+        # labels_line = ["Red", "Green", "Blue", "Orange"]
+        # labels_line_early = ["Early"]
+        # labels_line_late = ["Late"]
+        # items_line_early = [1,5,20,40,50,60]
+        # items_line_late = [10,20,1,15,20,30]
 
-        # start = datetime.strptime("0 7:00:00", "%H:%M:%S")
-        # end = datetime.strptime("17:00:00", "%H:%M:%S")
-        
-        # # min_gap
-        # min_gap = 5
 
-        # # compute datetime interval
-        # arr = [(start + timedelta(hours=min_gap*i/60)).strftime("%H:%M:%S")
-        #     for i in range(int((end-start).total_seconds() / 60.0 / min_gap))]
-        # print(arr)
-
+        start = ''
+        end = ''
         if EventActivity.objects.filter(event_day__activity_active=True):
             event = EventDay.objects.filter(activity_active__icontains=True)
             for time in event:
                 print(time.daily_login_time)
                 print(time.daily_logout_time)
-            print('this eventday', event)
-        # EventDaydaily_logout_time
+                start = datetime.strptime(str(time.daily_login_time), "%H:%M:%S").strftime("%H:%M:%S")
+                end = datetime.strptime(str(time.daily_logout_time), "%H:%M:%S").strftime("%H:%M:%S")
+                print('this start:' + str(start) + 'this end:' + str(end))
+            # print('this eventday', event)
+
+        delta = timedelta(minutes=5)
+        start = datetime.strptime(str(start), '%H:%M:%S' )
+        end = datetime.strptime(str(end), '%H:%M:%S' )
+        t = start
+
+        time = []
+        while t <= end :
+            t = t + delta
+            time.append(t)
+
+        time = list(datetime.strftime(i,'%H:%M:%S') for i in time)
+        # # min_gap
 
         data = {
             "labels_bar": labels_bar,
             "items_bar": items_bar,
-            "labels_pie": labels_pie,
-            "items_pie": items_pie,
-            "labels_line": labels_line,
-            "labels_line_early": labels_line_early,
-            "labels_line_late": labels_line_late,
-            "items_line_early": items_line_early,
-            "items_line_late": items_line_late,
+            # "labels_pie": labels_pie,
+            # "items_pie": items_pie,
+            "labels_line": time,
+            # "labels_line_early": labels_line_early,
+            # "labels_line_late": labels_line_late,
+            # "items_line_early": items_line_early,
+            # "items_line_late": items_line_late,
         }
         return Response(data)
-
-
-@login_required(login_url="login")
-def student_record(request):
-    studentFilter = StudentFilter()
-
-    user_list = User.objects.all().order_by("user_idnumber")
-    paginator = Paginator(user_list, 10)
-    page_number = request.GET.get("page")
-    users = paginator.get_page(page_number)
-    context = {"users": users, "studentFilter": studentFilter}
-    return render(request, "dashboard/student-record.html", context)
 
 
 @login_required(login_url="login")
@@ -247,7 +237,10 @@ def edit_event(request, event_id):
     except Event.DoesNotExist:
         raise Http404("Event does not exist")
 
-    context = {"event": event, "event_form": event_form}
+    context = {
+        "event": event,
+        "event_form": event_form
+    }
     return render(request, "dashboard/event/edit_event.html", context)
 
 # Buttons to disable/enable event
@@ -386,7 +379,7 @@ def create_activity(request):
         event_daily_form = EventDailyActivity(request.POST)
         if event_daily_form.is_valid():
             messages.add_message(
-                request, messages.SUCCESS, "A new event has been added!"
+                request, messages.SUCCESS, "A new activity has been added!"
             )
             event_daily_form.save()
             return redirect("create_activity")
@@ -416,7 +409,10 @@ def edit_activity(request, daily_event_id):
     except EventDay.DoesNotExist:
         raise Http404("Event date does not exist")
 
-    context = {"event_day": event_day, "event_daily_form": event_daily_form}
+    context = {
+        "event_day": event_day,
+        "event_daily_form": event_daily_form
+        }
     return render(request, "dashboard/activity/edit_activity.html", context)
 
 

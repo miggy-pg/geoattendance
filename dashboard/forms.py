@@ -183,6 +183,7 @@ class AdminForm(forms.ModelForm):
         model = User
         fields = (
             "user_idnumber",
+            "password",
             "email",
             "user_fname",
             "user_lname",
@@ -197,6 +198,7 @@ class AdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AdminForm, self).__init__(*args, **kwargs)
         self.fields["user_idnumber"].widget.attrs.update({"class": "input-field"})
+        self.fields["password"].widget.attrs.update({"class": "input-field"})
         self.fields["email"].widget.attrs.update({"class": "input-field"})
         self.fields["user_fname"].widget.attrs.update({"class": "input-field"})
         self.fields["user_lname"].widget.attrs.update({"class": "input-field"})

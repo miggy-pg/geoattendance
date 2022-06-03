@@ -197,7 +197,9 @@ nav{
   font-family: 'Roboto Mono';
   font-weight: var(--font-bold);
 }
-
+.margin-bot{
+  margin-bottom: -50px;
+}
 /* OVERLAY EDIT */
 .overlay__edit{
   position: absolute;
@@ -299,7 +301,7 @@ main {
 .panels__box {
   margin: 1rem 0;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 30px;
 
 }
@@ -562,15 +564,15 @@ main {
 }
 
 .attendance__data th{
-  background: #ffffff;
-  color: #1d3d3d;
+  background: #474747;
+  color: #ffffff; 
   border: 0;
   width: 9rem;
   text-align: center;
   padding: 20px;
   text-transform: uppercase;
-  font-size: var(--normal-font-size);
-  font-weight: var(--font-medium);
+  font-size: var(--small-font-size);
+  font-weight: var(--font-bold);
 }
 .attendance__data, td{
   font-family: 'Noto Sans JP Medium';
@@ -645,6 +647,10 @@ tr:nth-child(odd){
 	left: 0px;
 	border-radius: 50%;
 }
+.dataTables_wrapper .dataTables_filter {
+  float: none;
+  text-align: center;
+}
 
 /* SEARCH BAR */
 .search_box a{
@@ -703,6 +709,16 @@ tr:nth-child(odd){
 
 
 /* STUDENT RECORD PAGE*/
+
+/* Datatable buttons */
+.dt-buttons {
+  margin-bottom: 1.5rem;
+}
+
+.toolbar {
+  float: left;
+}
+
 .studentrecord__container {
   padding: 20px 15px;
 }
@@ -712,7 +728,7 @@ tr:nth-child(odd){
   border-radius: 0 0 5px 5px;
   background: #ffffff;
   box-shadow: 0 5px 12px rgba(32,32,32,.3);
-  height: 30rem;
+  height: 33rem;
   width: 98.2%;
 }
 
@@ -1508,15 +1524,15 @@ input[type="text"] {
 }
 
 .studentfeedback__data th{
-  background: #89b3ad;
-  color: #000000;
+  background: #474747;
+  color: #ffffff;
   border: 0;
   width: 9rem;
   text-align: center;
   padding: 20px;
   text-transform: uppercase;
   font-size: var(--smaller-font-size);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-bold);
 }
 .studentfeedback__data, td{
   font-family: 'Noto Sans JP Medium';

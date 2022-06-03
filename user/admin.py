@@ -17,6 +17,7 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserAdminCreationForm
 
     list_display = [
+        'ip',
         'user_idnumber',
         'email', 
         'user_lname', 
@@ -25,7 +26,11 @@ class UserAdmin(BaseUserAdmin):
         'staff', 
         'active',
         'timein',
-        'timeout'
+        'timein_status',
+        'timeout',
+        'timeout_status',
+        'prev_timeout',
+        'status'
         ]
     list_filter = [
         'admin', 
@@ -33,13 +38,13 @@ class UserAdmin(BaseUserAdmin):
         'staff'
         ]
     fieldsets = (
-        (None, {'fields': ('email','password','college','course','yearlevel','timein','timeout','present','ip','status')}),
+        (None, {'fields': ('user_idnumber','email','password','school', 'user_gender','yearlevel','timein','timein_status', 'timeout', 'timeout_status','present','ip','status')}),
         ('Permissions', {'fields': ('active','admin', 'staff')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('user_idnumber', 'password', 'password_confirm', 'email', 'user_lname', 'user_fname', 'yearlevel')}
+            'fields': ('user_idnumber', 'password', 'password_confirm', 'email', 'user_lname', 'user_fname', 'user_gender', 'school','yearlevel','admin', 'staff')}
         ),
     )
 

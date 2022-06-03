@@ -39,4 +39,3 @@ django-storages
 gunicorn
 requests
 pillow
-django-ipware

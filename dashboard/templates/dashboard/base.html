@@ -20,6 +20,7 @@
   <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.jqueryui.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
   <title>GeoAttendance {% block title %} {% endblock %} </title>
 </head>
@@ -94,11 +95,6 @@
             <img src="{% static 'media/attendance_icon.png' %}" alt="logo" />
             <a href="{% url 'attendance' %}">Attendance</a>
           </div>
-
-          <div class="sidebar__link">
-            <img src="{% static 'media/students_icon.png' %}" alt="logo" />
-            <a href="{% url 'student_record' %}">Student Record</a>
-          </div>
           
           <h2>REPORTS</h2>
           <div class="sidebar__link">
@@ -150,8 +146,6 @@
   <script src="{% static 'js/channels/reconnecting-websocket.js' %}"> </script>
   <script src="{% static 'js/datatables.js' %}"></script>
   <script src="{% static 'js/datatables-dashboard.js' %}"></script>
-  <script src="{% static 'js/datatables-student-record.js' %}"></script>
-
 
 
 </html>

@@ -3,7 +3,7 @@ $(document).ready(async function() {
     const formatTime = (time) =>{
         time = time.split(':')
         hour = parseInt(time[0])
-        AmOrPm = hour >= 12 ? 'pm' : 'am';
+        AmOrPm = hour >= 12 ? 'PM' : 'AM';
         hour = (hour % 12) || 12
         minutes = time[1].length<2?`0${time[1]}`:time[1] // starts with zero if minutes only one digit
 
@@ -23,13 +23,23 @@ $(document).ready(async function() {
         return item['admin'] != true;
     });
     
-    var countDataSet = dataSet.filter((item)=>{
+    var countTotal = dataSet.filter((item)=>{
         return item['admin'] != true;
     }).length
     // console.log(countdataSet);
+    var earlyToday= dataSet.filter((item)=>{
+        return item['timein_status'] == 'Early';
+    }).length
+    // console.log(earlyToday);
 
-    // display number of students
-    document.getElementById("total_students").textContent = JSON.stringify(countDataSet, undefined, 1)
+    var lateToday= dataSet.filter((item)=>{
+        return item['timein_status'] == 'Late';
+    }).length
+
+    var signoutEarly= dataSet.filter((item)=>{
+        return item['timeout_status'] == 'Early';
+    }).length
+
 
     $('#attendance_dashboard').DataTable( {
         dom: 'Bfrtip',      // The B is the Buttons extension and it tell DataTables where to put each element in the DOM that it creates
@@ -42,8 +52,7 @@ $(document).ready(async function() {
             { "data": "user_idnumber" },
             { "data": "user_lname" },
             { "data": "user_fname" },
-            { "data": "college" },
-            { "data": "course" },
+            { "data": "school" },
             { "data": "yearlevel" },
             { "data": "user_gender" },
             { "data": "timein" },
@@ -54,22 +63,16 @@ $(document).ready(async function() {
         ],
         "columnDefs":
            [
-               {
-                   "targets": [3],      //remove college column
-                   "visible": false,
-                   "searchable": false,
-               },
-               {
-                    "targets": [6],     //remove gender column
-                    "visible": false,
-                    "searchable": false,
-                },
                 {   "className": "dt-center",   // align text center
                     "targets": "_all"
                 },
            ]
     } );
-    
+    // display number of students
+    document.getElementById("total_students").textContent = JSON.stringify(countTotal, undefined, 1)
+    document.getElementById("early_today").textContent = JSON.stringify(earlyToday, undefined, 1)
+    document.getElementById("late_today").textContent = JSON.stringify(lateToday, undefined, 1)
+    document.getElementById("timeout_early").textContent = JSON.stringify(signoutEarly, undefined, 1)
     // $('.dataTables_filter')[0].style.textAlign = 'start'
 
     var ws_scheme = (window.location.protocol === 'https:' ? 'wss' : 'ws') 

@@ -10,9 +10,8 @@ from dashboard.views import ChartData
 urlpatterns = [
     url(r"^$", views.dashboard, name="dashboard"),
     url(r"^attendance/", views.attendance, name="attendance"),
-    url(r"^data-resentation", DataView.as_view(), name="data_presentation"),
+    url(r"^data-presentation", DataView.as_view(), name="data_presentation"),
     url(r"^api/chart", ChartData.as_view()),
-    url(r"^student-record/", views.student_record, name="student_record"),
     url(r"^student-feedback/", views.student_feedback, name="student_feedback"),
 
     url(r"^create-category/", views.create_category, name="create_category"),

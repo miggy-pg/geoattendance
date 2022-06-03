@@ -583,7 +583,7 @@ form{
     background-color: #00383a;
     text-align: center;
     box-shadow: 0 4px 6px rgba(174, 190, 205, .3);
-    height: 20vh;
+    height: 21vh;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;}
 .event__name{
     margin: auto;
@@ -1023,7 +1023,7 @@ form{
         margin: 0 auto;
     }
     .event__data{
-        height: 14vh;
+        height: 18vh;
         position: relative;
         z-index: 2;
         bottom: -1vh;
@@ -1105,29 +1105,28 @@ form{
         /* border-collapse: collapse; */
         margin: 0 auto;
         width: 85%;
+        /* border: 1px solid red; */
 
     }
     .schedule__table th{  
         line-height: 2rem;
         font-family: Noto Sans JP Medium;
         font-size: .75rem;
-        /* border: 1px solid #e1e1e1; */
         vertical-align: middle;
-
     }
     .schedule__table th:nth-child(1){
         width: 42vw;
         text-align: right;
-        margin: none;
+        margin: auto;
 
     }
     .schedule__table th:nth-child(2){
-        text-align: left;
+        text-align: right;
         width: 55vw;
         color: #00383a;
-        padding-left: 10vw;
         font-weight: var(--font-bold);
         margin: auto;
+        padding-right: 1rem;
 
     }
     .slides tr th {
@@ -1816,7 +1815,7 @@ form{
 
     }
     .event__data{
-        height: 16vh;
+        height: 18vh;
         position: relative;
         z-index: 2;
         bottom: -1vh;
@@ -2504,7 +2503,7 @@ form{
 
     }
     .event__data{
-        height: 17vh;
+        height: 19vh;
         position: relative;
         z-index: 2;
         bottom: -1vh;
@@ -3252,7 +3251,7 @@ form{
         margin: 0 auto;
     }
     .event__data{
-        height: 17vh;
+        height: 19vh;
         position: relative;
         z-index: 2;
         bottom: -1vh;

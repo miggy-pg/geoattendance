@@ -8,17 +8,17 @@ var endpoint = 'api/chart'
             labels_bar = data.labels_bar
             data_bar = data.items_bar
 
-            labels_pie = data.labels_pie
-            data_pie = data.items_pie
+            // labels_pie = data.labels_pie
+            // data_pie = data.items_pie
 
             labels_line = data.labels_line
-            labels_line_early = data.labels_line_early
-            labels_line_late = data.labels_line_late
-            data_line_early = data.items_line_early
-            data_line_late = data.items_line_late
+            // labels_line_early = data.labels_line_early
+            // labels_line_late = data.labels_line_late
+            // data_line_early = data.items_line_early
+            // data_line_late = data.items_line_late
 
             setBarGraph()
-            setPieGraph()
+            // setPieGraph()
             setLineGraph()
         },
         error: function(error_data){
@@ -93,43 +93,43 @@ var endpoint = 'api/chart'
 
       }
 
-      function setPieGraph(){
-        var ctx = document.getElementById('piegraph').getContext('2d');
-        var myChart = new Chart(ctx, {
-          type: 'pie',
-          data: {
-              labels: labels_pie,
-              datasets: [{
-                  label: '',
-                  data: data_pie,
-                  backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                      'rgba(153, 102, 255, 0.2)',
-                      'rgba(255, 159, 64, 0.2)'
-                  ],
-                  borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              scales: {
-                  y: {
-                      beginAtZero: true
-                  }
-              }
-          }
-      });
-      }
+    //   function setPieGraph(){
+    //     var ctx = document.getElementById('piegraph').getContext('2d');
+    //     var myChart = new Chart(ctx, {
+    //       type: 'pie',
+    //       data: {
+    //           labels: labels_pie,
+    //           datasets: [{
+    //               label: '',
+    //               data: data_pie,
+    //               backgroundColor: [
+    //                   'rgba(255, 99, 132, 0.2)',
+    //                   'rgba(54, 162, 235, 0.2)',
+    //                   'rgba(255, 206, 86, 0.2)',
+    //                   'rgba(75, 192, 192, 0.2)',
+    //                   'rgba(153, 102, 255, 0.2)',
+    //                   'rgba(255, 159, 64, 0.2)'
+    //               ],
+    //               borderColor: [
+    //                   'rgba(255, 99, 132, 1)',
+    //                   'rgba(54, 162, 235, 1)',
+    //                   'rgba(255, 206, 86, 1)',
+    //                   'rgba(75, 192, 192, 1)',
+    //                   'rgba(153, 102, 255, 1)',
+    //                   'rgba(255, 159, 64, 1)'
+    //               ],
+    //               borderWidth: 1
+    //           }]
+    //       },
+    //       options: {
+    //           scales: {
+    //               y: {
+    //                   beginAtZero: true
+    //               }
+    //           }
+    //       }
+    //   });
+    //   }
 
       function setLineGraph(){
         var ctx = document.getElementById('linegraph').getContext('2d');
@@ -138,19 +138,19 @@ var endpoint = 'api/chart'
           data: {
               labels: labels_line,
               datasets: [{
-                label: labels_line_early,
-                data: data_line_early,
+                // label: labels_line_early,
+                // data: data_line_early,
                 backgroundColor: 'transparent',
                 borderColor: 'rgba(93, 255, 114, 0.8)',
                 borderWidth: 4
               },
-              {
-                label: labels_line_late,
-                data: data_line_late,
-                backgroundColor: 'transparent',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 4
-              }
+            //   {
+            //     label: labels_line_late,
+            //     data: data_line_late,
+            //     backgroundColor: 'transparent',
+            //     borderColor: 'rgba(255, 99, 132, 1)',
+            //     borderWidth: 4
+            //   }
             ],
           },
           options: {
@@ -164,7 +164,10 @@ var endpoint = 'api/chart'
                       ticks: {
                           beginAtZero: true
                       }
-                  }]
+                  }],
+                  xAxes: [{
+                    type: 'time',
+                  }] 
                 }
             }
   });
