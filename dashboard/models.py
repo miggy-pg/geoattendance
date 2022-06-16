@@ -6,38 +6,6 @@ from django.utils.safestring import mark_safe
 from captiveportal import settings
 
 
-STATUS_CHOICES = (
-    ("Disabled", ("Disabled")),
-    ("Active", ("Active")),
-    ("Deleted", ("Deleted")),
-    ("Blocked", ("Blocked")),
-    ("Completed", ("Completed")),
-)
-
-
-class EventCategory(models.Model):
-    category_name = models.CharField(
-        max_length=30, 
-        verbose_name="Category Name", 
-        blank=False
-    )
-    category_status = models.CharField(
-        max_length=30, 
-        choices=STATUS_CHOICES, 
-        verbose_name="Status", 
-        blank=False
-    )
-
-    class Meta:
-        verbose_name_plural = "Event Category"
-
-    def __str__(self):
-        return self.category_name
-
-    def clean(self):
-        self.category_name = self.category_name.title()
-
-
 class Event(models.Model):
     event_name = models.CharField(
         max_length=50, 
@@ -47,12 +15,6 @@ class Event(models.Model):
     event_venue = models.CharField(
         max_length=75, 
         verbose_name="Location", 
-        blank=False
-    )
-    event_category = models.ForeignKey(
-        EventCategory, 
-        null=True, 
-        on_delete=models.SET_NULL, 
         blank=False
     )
     event_logo = models.ImageField(
@@ -72,7 +34,10 @@ class Event(models.Model):
         verbose_name="End Date", 
         blank=False
     )
-    event_active = models.BooleanField(default=False)
+    event_active = models.BooleanField(
+        default=False,
+        verbose_name="Enable"    
+    )
 
     class Meta:
         verbose_name_plural = "Event"
@@ -111,8 +76,13 @@ class EventDay(models.Model):
     )
     daily_login_time = models.TimeField(blank=False)
     daily_logout_time = models.TimeField(blank=False)
-    daily_active = models.BooleanField(default=False)
-    activity_active = models.BooleanField(default=False)
+    daily_active = models.BooleanField(
+        default=False,
+        verbose_name="Enable"    
+    )
+    activity_active = models.BooleanField(
+        default=False,
+    )
 
     class Meta:
         verbose_name_plural = "Event Day"

@@ -82,10 +82,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         choices=GENDER_CHOICES, 
         verbose_name="Gender"
         )
-    school = models.CharField(
+    college = models.CharField(
         max_length=50, 
-        blank=False, 
-        null=False
+        default="College of Computer Studies"
         )
     COURSE_CHOICES =(
         ("BSIT", "BS in Information Technology"), 

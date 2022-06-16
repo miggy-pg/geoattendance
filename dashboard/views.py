@@ -4,6 +4,7 @@ import time
 import json
 import os
 
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
@@ -36,30 +37,47 @@ from dashboard.models import (
     Event,
     StudentFeedback,
     EventDay,
-    EventCategory,
     EventActivity,
 )
 from dashboard.forms import (
     EventScheduleForm,
     EventTimeTableForm,
     EventDailyActivity,
-    CategoryForm,
-    AdminForm,
 )
 from user.models import User
 from dashboard.filters import StudentFilter
-
+from .thread import TimedCalls, my_function
 
 User = get_user_model()
 
 @login_required(login_url="login")
 def dashboard(request):
     event = Event.objects.filter(Q(event_active='True'))
-    event_day = EventDay.objects.filter(Q(activity_active='True'))
-    daily_schedule = EventActivity.objects.filter(event_day__activity_active=True)
-    day_event = EventDay.objects.filter(event_name__event_active=True)[0]
-    print('this day_event', day_event)
-    print('this day_event login and logout time', day_event.daily_login_time, day_event.daily_logout_time)
+    event_day = EventDay.objects.filter(Q(daily_active='True'))
+    daily_schedule = EventActivity.objects.filter(event_day__daily_active=True)
+
+    start_time = datetime.now() + timedelta(seconds=2)
+    run_time = timedelta(minutes=20)  # How long to iterate function.
+    end_time = start_time + run_time
+
+    assert start_time > datetime.now()
+    timed_calls = TimedCalls(my_function, 60)  # Thread to call function every 10 secs.
+
+    print(f'waiting until {start_time.strftime("%H:%M:%S")} to begin...')
+    wait_time = start_time - datetime.now()
+    time.sleep(wait_time.total_seconds())
+
+    print('starting')
+    timed_calls.start()  # Start thread.
+    while datetime.now() < end_time:
+        time.sleep(1)  # Twiddle thumbs while waiting.
+    print('done')
+    timed_calls.cancel()
+
+    # day_event = EventDay.objects.filter(event_name__event_active=True)[0]
+    # print('this day_event', day_event)
+    # print('this day_event login and logout time', day_event.daily_login_time, day_event.daily_logout_time)
+    
     context = {
         "event": event, 
         "daily_schedule": daily_schedule, 
@@ -218,7 +236,7 @@ def active_event_view(request, event_id):
 
 
 @login_required(login_url="login")
-def delete_event(event_id):
+def delete_event(request, event_id):
     Event.objects.get(id=event_id).delete()
     return HttpResponseRedirect("/dashboard/view-event")
 
@@ -243,6 +261,19 @@ def edit_event(request, event_id):
     }
     return render(request, "dashboard/event/edit_event.html", context)
 
+@login_required(login_url="login")
+def event_details(request, event_id):
+    event = Event.objects.filter(Q(event_active='True'))
+    activity = EventDay.objects.filter(event_name=event[0]).filter(daily_active=True)[0]
+    # user = User.objects.filter(event_name__event_day__isnull=False)
+
+    context = {
+        # "user": user,
+        "event": event,
+        "activity": activity,
+    }
+    return render(request, "dashboard/event/event_details.html")
+
 # Buttons to disable/enable event
 def active_event_view(request, event_id):
     event_info = Event.objects.get(pk=event_id)
@@ -258,114 +289,6 @@ def inactive_event_view(request, event_id):
         event_info.event_active = False
         event_info.save()
     return HttpResponseRedirect(reverse("view_event"))
-
-@login_required(login_url="login")
-def create_category(request):
-    if request.method == "POST":
-        category_form = CategoryForm(request.POST)
-        if category_form.is_valid():
-            messages.add_message(
-                request, messages.SUCCESS, "A new category has been added!"
-            )
-            category_form.save()
-            return redirect("create_category")
-    else:
-        category_form = CategoryForm()
-
-    context = {"category_form": category_form}
-    return render(request, "dashboard/category/create_category.html", context)
-
-
-@login_required(login_url="login")
-def view_category(request):
-    category_list = EventCategory.objects.all().order_by("-category_name")
-    paginator = Paginator(category_list, 9)
-    page_number = request.GET.get("page")
-    category_data = paginator.get_page(page_number)
-    context = {"category_data": category_data}
-    return render(request, "dashboard/category/view_category.html", context)
-
-
-@login_required(login_url="login")
-def delete_category(request, category_id):
-    EventCategory.objects.filter(id=category_id).delete()
-    return HttpResponseRedirect("/dashboard/view-category")
-
-
-@login_required(login_url="login")
-def edit_category(request, category_id):
-    try:
-        category = EventCategory.objects.get(pk=category_id)
-        category_form = CategoryForm(instance=category)
-
-        if request.method == "POST":
-            category_form = CategoryForm(request.POST, instance=category)
-            if category_form.is_valid():
-                category_form.save()
-                return redirect("view_category")
-    except EventCategory.DoesNotExist:
-        raise Http404("Event does not exist")
-
-    context = {"category": category, "category_form": category_form}
-    return render(request, "dashboard/category/edit_category.html", context)
-
-
-@login_required(login_url="login")
-def create_admin(request):
-    admin_context = AdminForm()
-
-    if request.method == "POST":
-        admin_context = AdminForm(request.POST)
-
-        if admin_context.is_valid():
-            admin_context.save()
-            messages.success(request, "Admin has been added!")
-            return redirect("create_admin")
-
-    context = {
-        "admin_context": admin_context
-    }
-    return render(request, "dashboard/admin/create_admin.html", context)
-
-
-@login_required(login_url="login")
-def view_admin(request):
-    admin_list = User.objects.all().order_by("-date_joined")
-    paginator = Paginator(admin_list, 10)
-    page_number = request.GET.get("page")
-    admin_data = paginator.get_page(page_number)
-    context = {
-        "admin_data": admin_data
-    }
-    return render(request, "dashboard/admin/view_admin.html", context)
-
-
-@login_required(login_url="login")
-def delete_admin(request,admin_id):
-    User.objects.filter(id=admin_id).delete()
-    return HttpResponseRedirect("/dashboard/view-admin-user/")
-
-
-@login_required(login_url="login")
-def edit_admin(request, admin_id):
-    try:
-        admin = User.objects.get(pk=admin_id)
-        admin_form = AdminForm(instance=admin)
-
-        if request.method == "POST":
-            admin_form = AdminForm(request.POST, instance=admin)
-            if admin_form.is_valid():
-                admin_form.save()
-                return redirect("view_admin")
-    except admin.DoesNotExist:
-        raise Http404("Admin does not exist")
-
-    context = {
-        "admin": admin, 
-        "admin_form": admin_form
-    }
-
-    return render(request, "dashboard/admin/edit_admin.html", context)
 
 
 @login_required(login_url="login")
@@ -428,16 +351,16 @@ def view_activity(request):
 
 def active_activity_view(request, activity_id):
     activity_info = EventDay.objects.get(pk=activity_id)
-    if activity_info.activity_active is False:
-        activity_info.activity_active = True
+    if activity_info.daily_active is False:
+        activity_info.daily_active = True
         activity_info.save()
     return HttpResponseRedirect(reverse("view_activity"))
 
 
 def inactive_active_view(request, activity_id):
     activity_info = EventDay.objects.get(pk=activity_id)
-    if activity_info.activity_active is True:
-        activity_info.activity_active = False
+    if activity_info.daily_active is True:
+        activity_info.daily_active = False
         activity_info.save()
     return HttpResponseRedirect(reverse("view_activity"))
 

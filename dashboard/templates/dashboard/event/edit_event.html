@@ -35,7 +35,7 @@
                 {% endfor %}
                 {% csrf_token %}
                 {{ event_form.as_p }}
-                <button id="event_submit" disabled="" type="submit">Update Event</button>
+                <button id="event_submit" type="submit">Update Event</button>
               </form>
               <div class="previous">
                 <button><a href="{% url 'view_event' %}">&laquo; Back</a></button>

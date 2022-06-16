@@ -29,7 +29,7 @@ class RegisterForm(forms.ModelForm):
         'email',
         'password',
         'password_confirm',
-        'school',
+        'college',
         'yearlevel',    
         ]
 
@@ -43,7 +43,7 @@ class RegisterForm(forms.ModelForm):
         self.fields['user_fname'].widget.attrs.update({'class':'info-field'})
         self.fields['user_lname'].widget.attrs.update({'class':'info-field'})
         self.fields['user_gender'].widget.attrs.update({'class':'input-field'})
-        self.fields['school'].widget.attrs.update({'class':'select-field'})
+        self.fields['college'].widget.attrs.update({'class':'select-field'})
         self.fields['yearlevel'].widget.attrs.update({'class':'yearlevel-field'})
     
     def clean(self):
@@ -60,7 +60,7 @@ class RegisterForm(forms.ModelForm):
         user.email = self.cleaned_data['email']
         user.user_fname = self.cleaned_data['user_fname']
         user.user_lname = self.cleaned_data['user_lname']
-        user.school = self.cleaned_data['school']
+        user.college = self.cleaned_data['college']
         user.yearlevel = self.cleaned_data['yearlevel']
         user.set_password(self.cleaned_data["password"])
 

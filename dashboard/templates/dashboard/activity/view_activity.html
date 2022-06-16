@@ -28,37 +28,35 @@
               <table class="attendance__data">
                   <thead>
                     <tr>
-                      <th>Status</th>
                       <th></th>
-                      <th></th>
+                      <th>Event Name</th>
                       <th>Event Date</th>
                       <th>Signin time</th>
                       <th>Signout time</th>
-                      <th>Event Name</th>
+                      <th>Action</th>
                       <th></th>
                       <th></th>
-
+                      <th></th>
                     </tr>
                   </thead>
                     <tbody>
                   {% for day in event_day_data %}
                     <tr>
-                      <td>
-                        <a class="event-click" data-id="{{ day.id }}" href="{% url 'active_activity' day.id %}" data-active="{{day.activity_active}}">Enable</a>
-                      </td>
-                      <td>
-                        <a class="event-click" data-id="{{ day.id }}" href="{% url 'inactive_activity' day.id %}" data-active="{{day.activity_active}}">Disable</a>
-                      </td>
                       <td><a href="{% url 'create_timetable' day.id %}">Add Activities</a></td>
-                      <td>{{ day.event_day| date:"l - M d,Y"}}</td>
-                      <td>{{ day.daily_login_time }}</td>
-                      <td>{{ day.daily_logout_time }}</td>
                       <td>{{ day.event_name }}</td>
+                      <td>{{ day.event_day| date:"l - M d,Y"}}</td>
+                      <td>{{ day.daily_login_time|time:"g:iA"|upper }}</td>
+                      <td>{{ day.daily_logout_time|time:"g:iA"|upper }}</td>
+                      <td>
+                        <a class="event-click" data-id="{{ day.id }}" href="{% url 'active_activity' day.id %}" data-active="{{day.daily_active}}">Enable</a>
+                      </td>
+                      <td>
+                        <a class="event-click" data-id="{{ day.id }}" href="{% url 'inactive_activity' day.id %}" data-active="{{day.daily_active}}">Disable</a>
+                      </td>
                       <td><a href="{% url 'edit_activity' day.id %}">Edit</a></td>
                       <td><a href="{% url 'delete_activity' day.id %}">Delete</a></td>
                     </tr>
                   {% endfor %}
-                    
                     </tbody>
                 </table>
             </div>

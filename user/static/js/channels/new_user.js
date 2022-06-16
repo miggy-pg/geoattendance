@@ -15,8 +15,6 @@ document.addEventListener("DOMContentLoaded",async function(event) {
     }
 
 
-
-
     var ws_scheme = (window.location.protocol === 'https:' ? 'wss' : 'ws') 
     var endpoint = ws_scheme + '://' + window.location.host + '/ws/new_user/'
     console.log(endpoint)

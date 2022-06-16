@@ -30,7 +30,7 @@
                 {% endif %}
                 <!-- remove this -->
                 <div class="overlay__edit">
-                  <div class="overlay__title overlay__edit margin-bot">
+                  <div class="overlay__title overlay__edit">
                     <p class="overlay__text">Edit</p>
                     {% for data in event %}
                     <a href="{% url 'edit_event' data.id%}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
@@ -50,7 +50,7 @@
                   {% endfor %}
                 {% endif %}
                 <div class="overlay__edit">
-                  <div class="overlay__title overlay__edit margin-bot">
+                  <div class="overlay__title overlay__edit">
                     <p class="overlay__text">Edit</p>
                     {% for data in event %}
                     <a href="{% url 'edit_event' data.id %}"><img src="{% static 'media/edit_icon.png'%}" alt="" /></a>
@@ -128,7 +128,7 @@
                 <div class="box">
                   <div class="box_inner">
                     <p>Late Today</p>
-                    <span id="late_today">645</span>
+                    <span id="late_today"></span>
                   </div>
                 </div>
 
@@ -147,7 +147,7 @@
                       <th style="background-color: #474747; color: #fff;">ID Number</th>
                       <th style="background-color: #474747; color: #fff;">Last Name</th>
                       <th style="background-color: #474747; color: #fff;">First Name</th>
-                      <th style="background-color: #474747; color: #fff;">School</th>
+                      <th style="background-color: #474747; color: #fff;">College</th>
                       <th style="background-color: #474747; color: #fff;">Year Level</th>
                       <th style="background-color: #474747; color: #fff;">Gender</th>
                       <th style="background-color: #474747; color: #fff;">Signed In</th>

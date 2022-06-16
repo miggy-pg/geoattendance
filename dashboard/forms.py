@@ -13,51 +13,10 @@ from dashboard.models import (
     StudentFeedback,
     EventActivity,
     EventDay,
-    EventCategory,
 )
-
-
-STATUS_CHOICES = (
-    (1, ("Disabled")),
-    (2, ("Active")),
-    (3, ("Deleted")),
-    (4, ("Blocked")),
-    (5, ("Completed")),
-)
-
-
-class CategoryForm(forms.ModelForm):
-    class Meta:
-        model = EventCategory
-        fields = ["category_name", "category_status"]
-
-    def clean(self):
-        try:
-            EventCategory.objects.get(category_name=self.cleaned_data["category_name"])
-            raise forms.ValidationError(
-                "This category name already exist. Please try another one!"
-            )
-        except EventCategory.DoesNotExist:
-            pass
-        return self.cleaned_data
-
-    def clean_category_name(self):
-        return self.cleaned_data["category_name"].capitalize()
-
-    def __str__(self):
-        return self.category_name
-
-    def __init__(self, *args, **kwargs):
-        super(CategoryForm, self).__init__(*args, **kwargs)
-
-        self.fields["category_name"].widget.attrs.update({"class": "choice-field"})
-        self.fields["category_status"].widget.attrs.update({"class": "input-field"})
 
 
 class EventScheduleForm(forms.ModelForm):
-    event_category = ModelChoiceField(
-        label="Category", queryset=EventCategory.objects.all()
-    )
     event_start = forms.DateField(
         required=True, label="From", widget=DateInput(attrs={"type": "date"})
     )
@@ -68,12 +27,12 @@ class EventScheduleForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = (
-            "event_category",
             "event_name",
             "event_venue",
             "event_start",
             "event_end",
             "event_logo",
+            "event_active",
         )
 
     def __str__(self):
@@ -95,11 +54,12 @@ class EventScheduleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EventScheduleForm, self).__init__(*args, **kwargs)
 
-        self.fields["event_category"].widget.attrs.update({"class": "choice-field"})
         self.fields["event_name"].widget.attrs.update({"class": "input-field"})
         self.fields["event_venue"].widget.attrs.update({"class": "input-field"})
         self.fields["event_start"].widget.attrs.update({"class": "start-field"})
         self.fields["event_end"].widget.attrs.update({"class": "end-field"})
+        self.fields["event_logo"].widget.attrs.update({"class": "event-logo"})
+        self.fields["event_active"].widget.attrs.update({"class": "event-btn"})
 
 
 class EventDailyActivity(forms.ModelForm):
@@ -110,12 +70,12 @@ class EventDailyActivity(forms.ModelForm):
     daily_login_time = forms.TimeField(
         required=True,
         label="Login Time",
-        widget=forms.TimeInput(attrs={"placeholder": "00:00 am/pm"}, format="%I:%M %p"),
+        widget=forms.TimeInput(attrs={"placeholder": "00:00 AM/PM"}, format="%I:%M %p"),
     )
     daily_logout_time = forms.TimeField(
         required=True,
         label="Logout Time",
-        widget=forms.TimeInput(attrs={"placeholder": "00:00 am/pm"}, format="%I:%M %p"),
+        widget=forms.TimeInput(attrs={"placeholder": "00:00 AM/PM"}, format="%I:%M %p"),
     )
 
     class Meta:
@@ -125,6 +85,7 @@ class EventDailyActivity(forms.ModelForm):
             "event_day",
             "daily_login_time",
             "daily_logout_time",
+            "daily_active",
         )
 
     def __init__(self, *args, **kwargs):
@@ -138,18 +99,20 @@ class EventDailyActivity(forms.ModelForm):
         self.fields["daily_logout_time"].widget.attrs.update(
             {"class": "activity-logout-field"}
         )
-
+        self.fields["daily_active"].widget.attrs.update(
+            {"class": "event-btn"}
+        )
 
 class EventTimeTableForm(forms.ModelForm):
     event_start_time = forms.TimeField(
         required=True,
         label="From time",
-        widget=forms.TimeInput(attrs={"placeholder": "00:00 am/pm"}, format="%I:%M %p"),
+        widget=forms.TimeInput(attrs={"placeholder": "00:00 AM/PM"}, format="%I:%M %p"),
     )
     event_end_time = forms.TimeField(
         required=True,
         label="End time",
-        widget=forms.TimeInput(attrs={"placeholder": "00:00 am/pm"}, format="%I:%M %p"),
+        widget=forms.TimeInput(attrs={"placeholder": "00:00 AM/PM"}, format="%I:%M %p"),
     )
     event_activity = forms.CharField(max_length=24, required=True, label="Activity")
 
@@ -176,30 +139,3 @@ TimetableFormSet = inlineformset_factory(
     extra=0,
     max_num=15,
 )
-
-
-class AdminForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = (
-            "user_idnumber",
-            "password",
-            "email",
-            "user_fname",
-            "user_lname",
-            "user_gender",
-            "staff",
-            "admin",
-        )
-
-    def __str__(self):
-        return self.email
-
-    def __init__(self, *args, **kwargs):
-        super(AdminForm, self).__init__(*args, **kwargs)
-        self.fields["user_idnumber"].widget.attrs.update({"class": "input-field"})
-        self.fields["password"].widget.attrs.update({"class": "input-field"})
-        self.fields["email"].widget.attrs.update({"class": "input-field"})
-        self.fields["user_fname"].widget.attrs.update({"class": "input-field"})
-        self.fields["user_lname"].widget.attrs.update({"class": "input-field"})
-        self.fields["user_gender"].widget.attrs.update({"class": "input-field"})

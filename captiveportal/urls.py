@@ -17,6 +17,7 @@ urlpatterns = [
     url(r"user/", include("user.urls"), name="user"),
     url(r"dashboard/", include("dashboard.urls"), name="dashboard"),
     url(r"students", csrf_exempt(views.students), name="students"),
+    url(r"event", csrf_exempt(views.event), name="event"),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

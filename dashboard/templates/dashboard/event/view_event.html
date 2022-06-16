@@ -27,42 +27,40 @@
               <table class="attendance__data">
                   <thead>
                     <tr>
-                      <th>Status</th>
                       <th></th>
                       <th>Event Logo</th>
                       <th>Event Name</th>
                       <th>Event Venue</th>
-                      <th>Event Category</th>
                       <th>Start Date</th>
                       <th>End Date</th>
+                      <th>Actions</th>
+                      <th></th>
                       <th></th>
                       <th></th>
                     </tr>
                   </thead>
-                  
                     <tbody>
                     {% for info in event_data %}
                     <tr>
+                      <td><a href="{% url 'event_details' info.id %}">Details</a></td>
+                      <td>
+                        <img src="{{ info.event_logo.url }}" alt="eventlogo" width="50px">
+                      </td>
+                      <td>{{ info.event_name }}</td>
+                      <td>{{ info.event_venue }}</td>
+                      <td>{{ info.event_start|date:"l - M d,Y" }}</td>
+                      <td>{{ info.event_end|date:"l - M d,Y" }}</td>
                       <td>
                         <a class="event-click" id="{{info.id}}" href="{% url 'active_event' info.id %}" data-event-active={{info.event_active}}>Enable</a>
                       </td>
                       <td>
                         <a class="event-click" id="{{info.id}}" href="{% url 'inactive_event' info.id %}" data-event-active={{info.event_active}}>Disable</a>
                       </td>
-
-                      <td>
-                        <img src="{{ info.event_logo.url }}" alt="eventlogo" width="50px">
-                      </td>
-                      <td>{{ info.event_name }}</td>
-                      <td>{{ info.event_venue }}</td>
-                      <td>{{ info.event_category }}</td>
-                      <td>{{ info.event_start|date:"l - M d,Y" }}</td>
-                      <td>{{ info.event_end|date:"l - M d,Y" }}</td>
+                      {}
                       <td><a href="{% url 'edit_event' info.id %}">Edit</a></td>
                       <td><a href="{% url 'delete_event' info.id %}">Delete</a></td>
                     </tr>
                     {% endfor %}
-                    
                     </tbody>
                 </table>
             </div>

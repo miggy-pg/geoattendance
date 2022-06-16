@@ -14,25 +14,16 @@ urlpatterns = [
     url(r"^api/chart", ChartData.as_view()),
     url(r"^student-feedback/", views.student_feedback, name="student_feedback"),
 
-    url(r"^create-category/", views.create_category, name="create_category"),
-    path("view-category/", views.view_category, name="view_category"),
-    path("edit-category/<int:category_id>/", views.edit_category, name="edit_category"),
-    path("delete-category/<int:category_id>/",views.delete_category,name="delete_category"),
-
-    url(r"^create-admin-user/", views.create_admin, name="create_admin"),
-    url(r"^view-admin-user/", views.view_admin, name="view_admin"),
-    path("edit-admin-user/<int:admin_id>/", views.edit_admin, name="edit_admin"),
-    path("delete-admin-user/<int:admin_id>/", views.delete_admin, name="delete_admin"),
-
     url(r"^create-event/", views.create_event, name="create_event"),
     url(r"^view-event/", views.view_event, name="view_event"),
+    path("event-details/<int:event_id>/", views.event_details, name="event_details"),
     path("delete-event/<int:event_id>/", views.delete_event, name="delete_event"),
     path("edit-event/<int:event_id>/", views.edit_event, name="edit_event"),
 
     path("create-activity/", views.create_activity, name="create_activity"),
     path("delete-activity/<int:daily_event_id>",views.delete_activity,name="delete_activity"),
     path("edit-activity/<int:daily_event_id>", views.edit_activity, name="edit_activity"),
-    url(r"^view-activity/", views.view_activity, name="view_activity"),
+    path("view-activity/", views.view_activity, name="view_activity"),
     path("create-activity/<pk>/", views.create_timetable, name="create_timetable"),
 
     path("htmx/create-timetable/<pk>/", views.detail_timetable, name="detail_timetable"),

@@ -45,6 +45,14 @@ def students(request):
         return JsonResponse(list(data), safe=False)
         
 
+@login_required(redirect_field_name=None)
+def event(request): 
+    if request.method == 'GET':
+        event = EventDay.objects.filter(daily_active=True)
+        day = event.values()
+        return JsonResponse(list(day), safe=False)
+
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -62,7 +70,7 @@ def index(request):
     print("IP", ip, 'Name', name)
     event_info = Event.objects.filter(Q(event_active='True'))
 
-    get_eventday = EventDay.objects.filter(Q(activity_active='True'))
+    get_eventday = EventDay.objects.filter(Q(daily_active='True'))
     print('this eventday', get_eventday)
 
     get_activity = EventActivity.objects.filter(event_day__activity_active=True)

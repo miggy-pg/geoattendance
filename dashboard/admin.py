@@ -5,14 +5,8 @@ from dashboard.models import (
     Event,
     EventActivity,
     EventDay,
-    EventCategory,
     StudentFeedback
 )
-
-
-
-class EventCategoryAdmin(admin.ModelAdmin):
-    list_display = ["category_name", "category_status"]
 
 
 class EventScheduleAdmin(admin.ModelAdmin):
@@ -20,7 +14,6 @@ class EventScheduleAdmin(admin.ModelAdmin):
         "event_photo",
         "event_name",
         "event_venue",
-        "event_category",
         "event_start",
         "event_end",
     ]
@@ -39,6 +32,5 @@ class EventDayAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EventDay, EventDayAdmin)
-admin.site.register(EventCategory, EventCategoryAdmin)
 admin.site.register(Event, EventScheduleAdmin)
 admin.site.register(StudentFeedback, StudentFeedbackAdmin)

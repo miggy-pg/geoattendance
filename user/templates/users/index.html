@@ -1,5 +1,6 @@
 {% extends 'users/base.html' %}
 {% load static %}
+{% load groupfilter %}
 
 {% block content %}
 <body>  
@@ -45,7 +46,7 @@
               {% for data in event_info %}
                 <h2>{{ data.event_name }}</h2>
                 <p>{{ data.event_venue }}</p>
-                <p>{{ data.event_start|date:"M d,Y" }} </p>
+                <p>{{ data.event_start|date:"M d,Y" }} ━ {{ data.event_end|date:"M d,Y" }}</p>
               {% endfor %}
             {% endif %}
               </div>
@@ -53,7 +54,10 @@
         </div>
   <!-- SCHEDULE INFO -->
         <div class="schedule">
-          <h2 class="schedule__day">DAY 1</h2>
+          {% for day in get_eventday %}
+          <h2 class="schedule__day">{{day.event_day|date:"l - M d,Y"}}</h2>
+          <h2 id="daily_login_time" style="display: none;">{{ day.daily_login_time | time:"g:iA"|upper }}</h2>
+          {% endfor %}
           <div id="slides" class="slides">
             <span class="slide">
               <table class="schedule__table">
@@ -74,7 +78,7 @@
 
             <div class="logout-btn">
               <img src="{% static 'media/logout_icon.png' %}" id="open-popup-btn">
-              {% if request.user.is_staff or request.user.is_admin %}
+              {% if request.user|group:"Student Officer" or request.user.is_admin %}
               <a href="{% url 'dashboard' %}"><img style="padding: 5px;" src="{% static 'media/dashboard_icon.png' %}"></a>
               {% endif %}
             </div>
