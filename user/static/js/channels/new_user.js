@@ -5,10 +5,7 @@ document.addEventListener("DOMContentLoaded",async function(event) {
     res = await fetch('http://' + window.location.host +'/students/')
     students = await res.json()
     me = students.find( ({user_idnumber})=> user_idnumber===localStorage.getItem('id') )
-    console.log('this me', me)
-    console.log('this me', me.timein)
-    console.log('this metimeout', me.timeout)
-    console.log('this last_login', me.last_login)
+    
     if(me.timein){
         document.querySelector('#checkin-out').classList.add('signedin')
         document.querySelector('#checkin-out').style.background = 'red'
